@@ -51,12 +51,6 @@ namespace SalonManager.Models
         }
         #endregion
 
-        protected override System.Windows.Window DataWindow(BaseData data)
-        {
-            EmployeeWindow window = new EmployeeWindow();
-            window.setData(data);
-            return window;
-        }
         public override bool checkData()
         {
             if (Salary == 0)

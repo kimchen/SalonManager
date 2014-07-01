@@ -9,26 +9,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SalonManager.Models;
+using SalonManager.Interface;
 
 namespace SalonManager.Views
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for EmployeeInfo.xaml
     /// </summary>
-    public partial class CustomerWindow : Window
+    public partial class EmployeeInfo : Page,IInfo
     {
-        public CustomerWindow()
+        public EmployeeInfo()
         {
             InitializeComponent();
         }
+
         public void setData(BaseData data)
         {
             this.DataContext = data;
-            InfoPage page = new InfoPage();
-            page.DataContext = data;
-            this.PageFrame.Content = page;
         }
     }
 }

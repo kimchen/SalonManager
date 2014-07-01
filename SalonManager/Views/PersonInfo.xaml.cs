@@ -12,19 +12,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SalonManager.Models;
+using SalonManager.Interface;
 
 namespace SalonManager.Views
 {
     /// <summary>
     /// Interaction logic for EmployeePage.xaml
     /// </summary>
-    public partial class InfoPage : Page
+    public partial class PersonInfo : Page, IInfo
     {
-        public InfoPage()
+        public PersonInfo()
         {
             InitializeComponent();
         }
-        public void setData(Person data)
+        public void setData(BaseData data)
         {
             this.DataContext = data;
         }

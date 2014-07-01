@@ -1,0 +1,34 @@
+﻿<Page x:Class="SalonManager.Views.EmployeeInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+	Title="EmployeeInfo">
+
+    <Grid>
+        <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="職位" Name="Post" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Post}" Name="PostText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="薪資" Name="Salary" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Salary}" Name="SalaryText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="抽成" Name="Commission" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Commission}" Name="CommissionText"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

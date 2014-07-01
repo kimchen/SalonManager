@@ -1,0 +1,43 @@
+﻿<Page x:Class="SalonManager.Views.PersonInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+	Title="PersonInfo">
+
+    <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+        <Border Style="{StaticResource InfoBorderStyle}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="姓名" Name="Name" Style="{StaticResource InfoTxtStyle}"/>
+                <TextBox Text="{Binding Name}" Name="NameText"/>
+            </StackPanel>
+        </Border>
+        <Border Style="{StaticResource InfoBorderStyle}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="電話" Name="Tel" Style="{StaticResource InfoTxtStyle}"/>
+                <TextBox Text="{Binding Tel}" Name="TelText"/>
+            </StackPanel>
+        </Border>
+        <Border Style="{StaticResource InfoBorderStyle}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="性別" Name="Gender" Style="{StaticResource InfoTxtStyle}"/>
+                <ComboBox Name="GenderBox" Width="150" Margin="5" SelectedIndex="{Binding GenderInt}">
+                    <ComboBoxItem Content="未知" />
+                    <ComboBoxItem Content="男" />
+                    <ComboBoxItem Content="女" />
+                </ComboBox>
+            </StackPanel>
+        </Border>
+        <Frame Name="CustomFrame"/>
+        <Border Style="{StaticResource InfoBorderStyle}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="備註" Name="Comment" Style="{StaticResource InfoTxtStyle}"/>
+                <TextBox Text="{Binding Comment}" Name="CommentText" Height="200" AcceptsReturn="True"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</Page>

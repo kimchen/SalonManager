@@ -34,12 +34,6 @@ namespace SalonManager.Models
         }
         #endregion
 
-        protected override System.Windows.Window DataWindow(BaseData data)
-        {
-            CustomerWindow window = new CustomerWindow();
-            window.setData(data);
-            return window;
-        }
         public override bool checkData()
         {
             return base.checkData();

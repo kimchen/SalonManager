@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using System.Windows;
+using SalonManager.Views;
 
 namespace SalonManager.Models
 {
@@ -20,12 +21,12 @@ namespace SalonManager.Models
         }
 
         #region EditWindow
-        protected virtual Window DataWindow(BaseData data) { return null; }
         public ICommand PopEditWindowCommand { get { return new DelegateCommand(OnPopEditWindow); } }
         private void OnPopEditWindow()
         {
             Console.Out.WriteLine("PopEditWindow");
-            Window window = DataWindow(this);
+            InfoWindow window = new InfoWindow();
+            window.setData(this);
             //window.Closed += OnEditWindowClosed;
             window.ShowDialog();
         }

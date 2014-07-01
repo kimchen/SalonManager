@@ -11,15 +11,14 @@
         Height="1024"
         Width="1280">
     <Window.Resources>
-        <viewModels:MainWindowViewModel x:Key="WindowsViewModel" />
-        <converters:IsBiggerThanConverter x:Key="IsBiggerThanConverter" />
+        <viewModels:MainWindowViewModel x:Key="WindowsViewModel"/>
     </Window.Resources>
 
     <Grid DataContext="{StaticResource WindowsViewModel}">
         <StackPanel Orientation="Vertical">
             <Border HorizontalAlignment="Left" Margin="20 20 0 0" BorderBrush="Black" BorderThickness="2" Width="600">
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock FontSize="16">搜尋：</TextBlock>
+                    <TextBlock FontSize="16" VerticalAlignment="Center">搜尋：</TextBlock>
                     <TextBox Name="SearchBox" Width="450" Text="{Binding FilterString , UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Button Padding="20 0" Margin="10 0" Command="{Binding ClearFilter}">清除</Button>
                 </StackPanel>
@@ -31,8 +30,7 @@
                     Margin="10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top">
-                            <DataGrid ItemsSource="{Binding CustomerView}"
-                      AutoGenerateColumns="False" CanUserAddRows="False" Height="768" Width="1024">
+                            <DataGrid ItemsSource="{Binding CustomerView}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Name}"
                                         IsReadOnly="True"
@@ -85,8 +83,7 @@
                     Margin="10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top">
-                            <DataGrid ItemsSource="{Binding EmployeeView}"
-                      AutoGenerateColumns="False" CanUserAddRows="False" Height="768" Width="1024">
+                            <DataGrid ItemsSource="{Binding EmployeeView}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Name}"
                                         IsReadOnly="True"
@@ -141,8 +138,7 @@
                     Margin="10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top">
-                            <DataGrid ItemsSource="{Binding DailyConsumptionView}"
-                      AutoGenerateColumns="False" CanUserAddRows="False" Height="768" Width="1024">
+                            <DataGrid ItemsSource="{Binding DailyConsumptionView}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding CustomerName}"
                                         IsReadOnly="True"

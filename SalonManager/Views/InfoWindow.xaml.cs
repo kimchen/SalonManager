@@ -11,31 +11,46 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SalonManager.Models;
+using SalonManager.Interface;
 
 namespace SalonManager.Views
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class EmployeeWindow : Window
+    public partial class InfoWindow : Window
     {
-        public EmployeeWindow()
+        public InfoWindow()
         {
             InitializeComponent();
         }
         public void setData(BaseData data)
         {
             this.DataContext = data;
-            InfoPage page = new InfoPage();
-            page.DataContext = data;
-            this.PageFrame.Content = page;
+            IInfo info = null;
+            if (data is Customer)
+            {
+                info = new PersonInfo();
+                IInfo info2 = new CustomerInfo();
+                info2.setData(data);
+                ((PersonInfo)info).CustomFrame.Content = info2;
+            }
+            else if (data is Employee)
+            {
+                info = new PersonInfo();
+                IInfo info2 = new EmployeeInfo();
+                info2.setData(data);
+                ((PersonInfo)info).CustomFrame.Content = info2;
+            }
+            info.setData(data);
+            this.PageFrame.Content = info;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.DataContext != null)
             {
-                Person data = (Person)this.DataContext;
+                BaseData data = (BaseData)this.DataContext;
                 if(data.update())
                     this.Close();
             }
@@ -44,7 +59,5 @@ namespace SalonManager.Views
         {
             this.Close();
         }
-
-        
     }
 }
