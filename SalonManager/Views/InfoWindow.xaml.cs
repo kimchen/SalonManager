@@ -42,6 +42,18 @@ namespace SalonManager.Views
                 info2.setData(data);
                 ((PersonInfo)info).CustomFrame.Content = info2;
             }
+            else if (data is Goods)
+            {
+                info = new GoodsInfo();
+            }
+            else if (data is Service)
+            {
+                info = new ServiceInfo();
+            }
+            else if (data is DailyConsumption)
+            {
+                info = new DailyConsumptionInfo();
+            }
             info.setData(data);
             this.PageFrame.Content = info;
         }

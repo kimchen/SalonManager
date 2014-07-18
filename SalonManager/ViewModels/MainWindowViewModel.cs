@@ -8,12 +8,17 @@ using System.Windows;
 using System.Reflection;
 using System.ComponentModel;
 using System.Windows.Data;
-using System.Reflection;
 
 namespace SalonManager.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+        private static MainWindowViewModel instance = null;
+        public static MainWindowViewModel ins()
+        {
+            return instance;
+        }
+
         #region MyDateTime
         private DateTime _myDateTime;
         public DateTime MyDateTime
@@ -74,6 +79,36 @@ namespace SalonManager.ViewModels
         }
         #endregion
 
+        #region GoodsCollection
+        private ObservableCollection<Goods> _goodsCollection;
+        public ObservableCollection<Goods> GoodsCollection
+        {
+            get { return _goodsCollection; }
+            set { _goodsCollection = value; if (GoodsView != null)GoodsView.Refresh(); }
+        }
+        public ICollectionView goodsView;
+        public ICollectionView GoodsView
+        {
+            get { return goodsView; }
+            set { goodsView = value; RaisePropertyChanged(() => GoodsView); }
+        }
+        #endregion
+
+        #region ServiceCollection
+        private ObservableCollection<Service> _serviceCollection;
+        public ObservableCollection<Service> ServiceCollection
+        {
+            get { return _serviceCollection; }
+            set { _serviceCollection = value; if (ServiceView != null)ServiceView.Refresh(); }
+        }
+        public ICollectionView serviceView;
+        public ICollectionView ServiceView
+        {
+            get { return serviceView; }
+            set { serviceView = value; RaisePropertyChanged(() => ServiceView); }
+        }
+        #endregion
+
         #region DailyConsumptionCollection
         private ObservableCollection<DailyConsumption> _dailyConsumptionCollection;
         public ObservableCollection<DailyConsumption> DailyConsumptionCollection
@@ -93,6 +128,9 @@ namespace SalonManager.ViewModels
         #region Commands
         public ICommand AddCustomerDataCommand { get { return new DelegateCommand(OnAddCustomerData); } }
         public ICommand AddEmployeeDataCommand { get { return new DelegateCommand(OnAddEmployeeData); } }
+        public ICommand AddGoodsDataCommand { get { return new DelegateCommand(OnAddGoodsData); } }
+        public ICommand AddServiceDataCommand { get { return new DelegateCommand(OnAddServiceData); } }
+        public ICommand AddDailyConsumptionDataCommand { get { return new DelegateCommand(OnAddDailyConsumptionData); } }
         public ICommand ClearFilter { get { return new DelegateCommand(OnClearFilter); } }
         public ICommand CloseProgram { get { return new DelegateCommand(OnCloseProgram); } }
         #endregion
@@ -103,6 +141,7 @@ namespace SalonManager.ViewModels
             initCollection();
             LoadDBData();
             //RandomizeData();
+            instance = this;
         }
         #endregion
 
@@ -119,6 +158,27 @@ namespace SalonManager.ViewModels
             employee.setUpdateDelegate(UpdateData);
             employee.setDeleteDelegate(DeleteData);
             employee.PopEditWindowCommand.Execute(null);
+        }
+        private void OnAddGoodsData()
+        {
+            Goods goods = new Goods();
+            goods.setUpdateDelegate(UpdateData);
+            goods.setDeleteDelegate(DeleteData);
+            goods.PopEditWindowCommand.Execute(null);
+        }
+        private void OnAddServiceData()
+        {
+            Service service = new Service();
+            service.setUpdateDelegate(UpdateData);
+            service.setDeleteDelegate(DeleteData);
+            service.PopEditWindowCommand.Execute(null);
+        }
+        private void OnAddDailyConsumptionData()
+        {
+            DailyConsumption dailyConsumption = new DailyConsumption();
+            dailyConsumption.setUpdateDelegate(UpdateData);
+            dailyConsumption.setDeleteDelegate(DeleteData);
+            dailyConsumption.PopEditWindowCommand.Execute(null);
         }
         private void OnClearFilter()
         {
@@ -151,24 +211,28 @@ namespace SalonManager.ViewModels
             if (EmployeeView != null) EmployeeView.Refresh();
             if (CustomerView != null) CustomerView.Refresh();
             if (DailyConsumptionView != null) DailyConsumptionView.Refresh();
-            
+            if (GoodsView != null) GoodsView.Refresh();
+            if (ServiceView != null) ServiceView.Refresh();
         }
         private void initCollection()
         {
             EmployeeCollection = new ObservableCollection<Employee>();
             CustomerCollection = new ObservableCollection<Customer>();
+            GoodsCollection = new ObservableCollection<Goods>();
+            ServiceCollection = new ObservableCollection<Service>();
             DailyConsumptionCollection = new ObservableCollection<DailyConsumption>();
+
             EmployeeView = CollectionViewSource.GetDefaultView(EmployeeCollection);
             CustomerView = CollectionViewSource.GetDefaultView(CustomerCollection);
+            GoodsView = CollectionViewSource.GetDefaultView(GoodsCollection);
+            ServiceView = CollectionViewSource.GetDefaultView(ServiceCollection);
             DailyConsumptionView = CollectionViewSource.GetDefaultView(DailyConsumptionCollection);
+
             EmployeeView.Filter = new Predicate<object>(SearchFilter);
             CustomerView.Filter = new Predicate<object>(SearchFilter);
+            GoodsView.Filter = new Predicate<object>(SearchFilter);
+            ServiceView.Filter = new Predicate<object>(SearchFilter);
             DailyConsumptionView.Filter = new Predicate<object>(SearchFilter);
-
-            DailyConsumption dc = new DailyConsumption();
-            dc.ConsumerGoods.Add("111");
-            dc.ConsumerGoods.Add("222");
-            DailyConsumptionCollection.Add(dc);
         }
         private void LoadDBData()
         {
@@ -185,6 +249,27 @@ namespace SalonManager.ViewModels
                 customer.setDeleteDelegate(DeleteData);
                 customer.setUpdateDelegate(UpdateData);
                 CustomerCollection.Add(customer);
+            }
+            List<Goods> goodsList = DBConnection.ins().queryData<Goods>();
+            foreach (Goods goods in goodsList)
+            {
+                goods.setDeleteDelegate(DeleteData);
+                goods.setUpdateDelegate(UpdateData);
+                GoodsCollection.Add(goods);
+            }
+            List<Service> serviceList = DBConnection.ins().queryData<Service>();
+            foreach (Service service in serviceList)
+            {
+                service.setDeleteDelegate(DeleteData);
+                service.setUpdateDelegate(UpdateData);
+                ServiceCollection.Add(service);
+            }
+            List<DailyConsumption> dailyConsumptionList = DBConnection.ins().queryData<DailyConsumption>();
+            foreach (DailyConsumption dailyConsumption in dailyConsumptionList)
+            {
+                dailyConsumption.setDeleteDelegate(DeleteData);
+                dailyConsumption.setUpdateDelegate(UpdateData);
+                DailyConsumptionCollection.Add(dailyConsumption);
             }
         }
         private void RandomizeData()
@@ -237,12 +322,28 @@ namespace SalonManager.ViewModels
                 EmployeeCollection.Remove((Employee)target);
                 DBConnection.ins().deleteData<Employee>(target);
                 return true;
+            }else if(target is Goods){
+                GoodsCollection.Remove((Goods)target);
+                DBConnection.ins().deleteData<Goods>(target);
+                return true;
+            }
+            else if (target is Service)
+            {
+                ServiceCollection.Remove((Service)target);
+                DBConnection.ins().deleteData<Service>(target);
+                return true;
+            }
+            else if (target is DailyConsumption)
+            {
+                DailyConsumptionCollection.Remove((DailyConsumption)target);
+                DBConnection.ins().deleteData<DailyConsumption>(target);
+                return true;
             }
             return false;
         }
         private bool UpdateData(Object target)
         {
-            if (!(((Person)target).checkData()))
+            if (!(((BaseData)target).checkData()))
             {
                 MessageBoxResult result = MessageBox.Show("請確實填寫資料", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -276,6 +377,57 @@ namespace SalonManager.ViewModels
                     EmployeeCollection.Add((Employee)target);
                     DBConnection.ins().addData<Employee>(target);
                     ((Employee)target).dbid = DBConnection.ins().getDataId<Employee>(target);
+                }
+                return true;
+            }
+            else if (target is Goods)
+            {
+                if (GoodsCollection.Contains((Goods)target))
+                {
+                    int index = GoodsCollection.IndexOf((Goods)target);
+                    GoodsCollection.RemoveAt(index);
+                    GoodsCollection.Insert(index, (Goods)target);
+                    DBConnection.ins().updateData<Goods>(target);
+                }
+                else
+                {
+                    GoodsCollection.Add((Goods)target);
+                    DBConnection.ins().addData<Goods>(target);
+                    ((Goods)target).dbid = DBConnection.ins().getDataId<Goods>(target);
+                }
+                return true;
+            }
+            else if (target is Service)
+            {
+                if (ServiceCollection.Contains((Service)target))
+                {
+                    int index = ServiceCollection.IndexOf((Service)target);
+                    ServiceCollection.RemoveAt(index);
+                    ServiceCollection.Insert(index, (Service)target);
+                    DBConnection.ins().updateData<Service>(target);
+                }
+                else
+                {
+                    ServiceCollection.Add((Service)target);
+                    DBConnection.ins().addData<Service>(target);
+                    ((Service)target).dbid = DBConnection.ins().getDataId<Service>(target);
+                }
+                return true;
+            }
+            else if (target is DailyConsumption)
+            {
+                if (DailyConsumptionCollection.Contains((DailyConsumption)target))
+                {
+                    int index = DailyConsumptionCollection.IndexOf((DailyConsumption)target);
+                    DailyConsumptionCollection.RemoveAt(index);
+                    DailyConsumptionCollection.Insert(index, (DailyConsumption)target);
+                    DBConnection.ins().updateData<DailyConsumption>(target);
+                }
+                else
+                {
+                    DailyConsumptionCollection.Add((DailyConsumption)target);
+                    DBConnection.ins().addData<DailyConsumption>(target);
+                    ((DailyConsumption)target).dbid = DBConnection.ins().getDataId<DailyConsumption>(target);
                 }
                 return true;
             }

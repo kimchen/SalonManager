@@ -8,7 +8,9 @@ namespace SalonManager.Models
 {
     public class DailyConsumption : BaseData
     {
+        public DailyConsumption() : base() { }
         public string customerName = "";
+        public string customerId = "";
         public string CustomerName
         {
             get { return customerName; }
@@ -16,38 +18,39 @@ namespace SalonManager.Models
         }
 
         public string employeeName = "";
+        public string employeeId = "";
         public string EmployeeName
         {
             get { return employeeName; }
             set { employeeName = value; }
         }
 
-        public List<string> consumerGoods = new List<string>();
-        public List<string> ConsumerGoods
+        public string consumerGoods = "";
+        public string ConsumerGoods
         {
             get { return consumerGoods; }
             set { consumerGoods = value; }
         }
-        public string ConsumerGoodsString
-        {
-            get
-            {
-                string tempString = "";
-                foreach (string info in consumerGoods)
-                {
-                    tempString += info + "\n";
-                }
-                if (tempString.EndsWith("\n"))
-                    tempString = tempString.Remove(tempString.Length - 1);
-                return tempString;
-            }
-        }
+        //public string ConsumerGoodsString
+        //{
+        //    get
+        //    {
+        //        string tempString = "";
+        //        foreach (string info in consumerGoods)
+        //        {
+        //            tempString += info + "\n";
+        //        }
+        //        if (tempString.EndsWith("\n"))
+        //            tempString = tempString.Remove(tempString.Length - 1);
+        //        return tempString;
+        //    }
+        //}
 
-        public string content = "";
-        public string Content
+        public string service = "";
+        public string Service
         {
-            get { return content; }
-            set { content = value; }
+            get { return service; }
+            set { service = value; }
         }
 
         public double discount = 0;
@@ -62,6 +65,13 @@ namespace SalonManager.Models
         {
             get { return cost; }
             set { cost = value; }
+        }
+
+        public int payment = 0;
+        public int Payment
+        {
+            get { return payment; }
+            set { payment = value; }
         }
 
         public override bool checkData()

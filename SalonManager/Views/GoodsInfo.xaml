@@ -1,0 +1,40 @@
+﻿<Page x:Class="SalonManager.Views.GoodsInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="300"
+	Title="GoodsInfo">
+
+    <Grid>
+        <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="產品名稱" Name="Name" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Name}" Name="NameText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="價格" Name="Price" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Price}" Name="PriceText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="庫存" Name="Inventory" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Inventory}" Name="InventoryText" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="抽成金額" Name="Commission" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Commission}" Name="CommissionText"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

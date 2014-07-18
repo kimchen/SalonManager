@@ -1,0 +1,56 @@
+﻿<Page x:Class="SalonManager.Views.DailyConsumptionInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="300"
+	Title="DailyConsumptionInfo">
+
+    <Grid>
+        <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="客戶名稱" Name="CustomerName" Style="{StaticResource InfoTxtStyle}"/>
+                    <ComboBox Name="CustomerNameBox" Width="150" Margin="5" SelectionChanged="CustomerNameBox_SelectionChanged">
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="服務員工" Name="EmployeeName" Style="{StaticResource InfoTxtStyle}"/>
+                    <ComboBox Name="EmployeeNameBox" Width="150" Margin="5" SelectionChanged="EmployeeNameBox_SelectionChanged">
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="消費產品" Name="ConsumerGoods" Style="{StaticResource InfoTxtStyle}"/>
+                    <ListBox Name="ConsumerGoodsListBox" MinHeight="50" Width="150" Margin="1" SelectionChanged="ConsumerGoodsListBox_SelectionChanged"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="折扣" Name="Discount" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Discount}" Name="DiscountText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="預付扣抵" Name="Payment" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Payment}" Name="PaymentText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="總金額" Name="Cost" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBlock Text="{Binding Cost}" Name="CostText" Style="{StaticResource InfoTxtStyle}" Foreground="Red"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        
+    </Grid>
+</Page>
