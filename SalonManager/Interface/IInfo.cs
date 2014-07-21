@@ -9,5 +9,7 @@ namespace SalonManager.Interface
     interface IInfo
     {
         void setData(BaseData data);
+        void onSave();
+        void onCancel();
     }
 }

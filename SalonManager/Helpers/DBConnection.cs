@@ -20,7 +20,7 @@ namespace SalonManager.Helpers
         private string password = "1234";
         private SQLiteConnection connection = null;
 
-        private Dictionary<string, Type> tableMap = new Dictionary<string, Type>() { { "customerTable", typeof(Customer) }, { "employeeTable", typeof(Employee) }, { "goodsTable", typeof(Goods) }, { "serviceTable", typeof(Service) }, { "consumptionTable", typeof(DailyConsumption) } };
+        private Dictionary<string, Type> tableMap = new Dictionary<string, Type>() { { "customerTable", typeof(Customer) }, { "employeesTable", typeof(Employee) }, { "goodsTable", typeof(Goods) }, { "serviceTable", typeof(Service) }, { "consumptionssTable", typeof(DailyConsumption) } };
 
         public static DBConnection ins()
         {

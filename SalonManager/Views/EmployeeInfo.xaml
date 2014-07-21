@@ -19,8 +19,8 @@
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="薪資" Name="Salary" Style="{StaticResource InfoTxtStyle}"/>
-                    <TextBox Text="{Binding Salary}" Name="SalaryText"/>
+                    <TextBlock Text="基本底薪" Name="BasicSalary" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding BasicSalary}" Name="BasicSalaryText"/>
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">

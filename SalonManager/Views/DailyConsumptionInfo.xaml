@@ -26,16 +26,41 @@
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="消費產品" Name="ConsumerGoods" Style="{StaticResource InfoTxtStyle}"/>
-                    <ListBox Name="ConsumerGoodsListBox" MinHeight="50" Width="150" Margin="1" SelectionChanged="ConsumerGoodsListBox_SelectionChanged"/>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <ListBox Name="ConsumerGoodsListBox" MinHeight="50" Width="150" Margin="5" Height="100" />
+                            <Button Name="ConsumerGoodsRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ConsumerGoodsRemoveBtn_Click"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox Name="ConsumerGoodsAddBox" Width="150" Margin="5"/>
+                            <Button Name="ConsumerGoodsAddBtn" Content="加入" Foreground="Black" Background="LightBlue"  Height="30" Padding="10,0" Click="ConsumerGoodsAddBtn_Click"/>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </Border>
-
+            
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="服務內容" Name="Service" Style="{StaticResource InfoTxtStyle}"/>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <ListBox Name="ServiceListBox" MinHeight="50" Width="150" Margin="5" Height="100" />
+                            <Button Name="ServiceRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ServiceRemoveBtn_Click"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox Name="ServiceAddBox" Width="150" Margin="5"/>
+                            <Button Name="ServiceAddBtn" Content="加入" Foreground="Black" Background="LightBlue"  Height="30" Padding="10,0" Click="ServiceAddBtn_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="折扣" Name="Discount" Style="{StaticResource InfoTxtStyle}"/>
-                    <TextBox Text="{Binding Discount}" Name="DiscountText"/>
+                    <TextBox Text="{Binding Discount}" Name="DiscountText" TextChanged="DiscountText_TextChanged"/>
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">

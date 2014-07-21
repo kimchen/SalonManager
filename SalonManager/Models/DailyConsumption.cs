@@ -25,6 +25,7 @@ namespace SalonManager.Models
             set { employeeName = value; }
         }
 
+        public string consumerGoodsId = "";
         public string consumerGoods = "";
         public string ConsumerGoods
         {
@@ -46,6 +47,7 @@ namespace SalonManager.Models
         //    }
         //}
 
+        public string serviceId = "";
         public string service = "";
         public string Service
         {
@@ -53,13 +55,14 @@ namespace SalonManager.Models
             set { service = value; }
         }
 
-        public double discount = 0;
-        public double Discount
+        public int discount = 0;
+        public int Discount
         {
             get { return discount; }
             set { discount = value; }
         }
 
+        public int oriCost = 0;
         public int cost = 0;
         public int Cost
         {
@@ -76,6 +79,8 @@ namespace SalonManager.Models
 
         public override bool checkData()
         {
+            if (customerName.Equals("") || employeeName.Equals(""))
+                return false;
             return base.checkData();
         }
     }

@@ -20,6 +20,7 @@ namespace SalonManager.Views
     /// </summary>
     public partial class InfoWindow : Window
     {
+        List<IInfo> infoList = new List<IInfo>();
         public InfoWindow()
         {
             InitializeComponent();
@@ -31,28 +32,35 @@ namespace SalonManager.Views
             if (data is Customer)
             {
                 info = new PersonInfo();
+                infoList.Add(info);
                 IInfo info2 = new CustomerInfo();
+                infoList.Add(info2);
                 info2.setData(data);
                 ((PersonInfo)info).CustomFrame.Content = info2;
             }
             else if (data is Employee)
             {
                 info = new PersonInfo();
+                infoList.Add(info);
                 IInfo info2 = new EmployeeInfo();
+                infoList.Add(info2);
                 info2.setData(data);
                 ((PersonInfo)info).CustomFrame.Content = info2;
             }
             else if (data is Goods)
             {
                 info = new GoodsInfo();
+                infoList.Add(info);
             }
             else if (data is Service)
             {
                 info = new ServiceInfo();
+                infoList.Add(info);
             }
             else if (data is DailyConsumption)
             {
                 info = new DailyConsumptionInfo();
+                infoList.Add(info);
             }
             info.setData(data);
             this.PageFrame.Content = info;
@@ -63,12 +71,23 @@ namespace SalonManager.Views
             if (this.DataContext != null)
             {
                 BaseData data = (BaseData)this.DataContext;
-                if(data.update())
-                    this.Close();
+                if (!data.checkData())
+                {
+                    MessageBoxResult result = MessageBox.Show("請確實填寫資料", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    foreach (IInfo info in infoList)
+                        info.onSave();
+                    if (data.update())
+                        this.Close();
+                }
             }
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            foreach (IInfo info in infoList)
+                info.onCancel();
             this.Close();
         }
     }

@@ -97,15 +97,18 @@
                                     <DataGridTextColumn Binding="{Binding Post}"
                                         IsReadOnly="True"
                                         Header="職位" Foreground="Purple" Width="1*"/>
+                                    <DataGridTextColumn Binding="{Binding BasicSalary}"
+                                        IsReadOnly="True"
+                                        Header="基本底薪" Foreground="OrangeRed"  Width="1*"/>
                                     <DataGridTextColumn Binding="{Binding Salary}"
                                         IsReadOnly="True"
-                                        Header="基本薪資" Foreground="Red" Width="1*"/>
+                                        Header="本月薪資" Foreground="Red" Width="1*"/>
                                     <DataGridTextColumn Binding="{Binding CommissionString}"
                                         IsReadOnly="True"
-                                        Header="服務抽成" Foreground="Green" Width="1*"/>
+                                        Header="抽成" Foreground="Green" Width="0.5*"/>
                                     <DataGridTextColumn Binding="{Binding Comment}"
                                         IsReadOnly="True"
-                                        Header="備註" Width="2.5*"/>
+                                        Header="備註" Width="2*"/>
                                     <DataGridTemplateColumn Width="2*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>

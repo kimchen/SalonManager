@@ -27,6 +27,13 @@ namespace SalonManager.Models
         #endregion
 
         #region Salary
+        public int basicSalary = 0;
+        public int BasicSalary
+        {
+            get { return basicSalary; }
+            set { basicSalary = value; }
+        }
+        public int monthlyBonus = 0;
         public int salary = 0;
         public int Salary
         {

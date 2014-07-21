@@ -123,7 +123,27 @@ namespace SalonManager.ViewModels
             set { dailyConsumptionView = value; RaisePropertyChanged(() => DailyConsumptionView); }
         }
         #endregion
-        
+
+        public Goods GetGoodsById(String id)
+        {
+            foreach (Goods goods in GoodsCollection)
+            {
+                string itemId = goods.DBID.ToString();
+                if (itemId.Equals(id))
+                    return goods;
+            }
+            return null;
+        }
+        public Service GetServiceById(String id)
+        {
+            foreach (Service service in ServiceCollection)
+            {
+                string itemId = service.DBID.ToString();
+                if (itemId.Equals(id))
+                    return service;
+            }
+            return null;
+        }
 
         #region Commands
         public ICommand AddCustomerDataCommand { get { return new DelegateCommand(OnAddCustomerData); } }
@@ -306,7 +326,7 @@ namespace SalonManager.ViewModels
             }
         }
 
-        private bool DeleteData(Object target)
+        public bool DeleteData(Object target)
         {
             MessageBoxResult result = MessageBox.Show("是否確定刪除?", "確認視窗", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.No)
@@ -341,13 +361,9 @@ namespace SalonManager.ViewModels
             }
             return false;
         }
-        private bool UpdateData(Object target)
+        public bool UpdateData(Object target)
         {
-            if (!(((BaseData)target).checkData()))
-            {
-                MessageBoxResult result = MessageBox.Show("請確實填寫資料", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else if (target is Customer)
+            if (target is Customer)
             {
                 if (CustomerCollection.Contains((Customer)target))
                 {

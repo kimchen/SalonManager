@@ -29,5 +29,13 @@ namespace SalonManager.Views
         {
             this.DataContext = data;
         }
+        public void onSave()
+        {
+
+        }
+        public void onCancel()
+        {
+
+        }
     }
 }
