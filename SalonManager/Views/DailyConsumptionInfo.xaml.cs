@@ -24,6 +24,7 @@ namespace SalonManager.Views
     {
         private DailyConsumption info = null;
         private Dictionary<string, int> tempGoodsList = new Dictionary<string, int>();
+        private List<string> tempSerivceList = new List<string>();
         public DailyConsumptionInfo()
         {
             InitializeComponent();
@@ -96,9 +97,9 @@ namespace SalonManager.Views
             if (item == null)
                 return;
             Goods goods = MainWindowViewModel.ins().GetGoodsById(item.Uid);
-            if (tempGoodsList.ContainsKey(goods.DBID.ToString()))
+            if (tempGoodsList.ContainsKey(item.Uid))
             {
-                tempGoodsList[goods.DBID.ToString()] -= 1;
+                tempGoodsList[item.Uid] -= 1;
             }
 
             this.ConsumerGoodsListBox.Items.Remove(item);
@@ -121,22 +122,22 @@ namespace SalonManager.Views
                 return;
 
             int tempNum = 0;
-            if (tempGoodsList.ContainsKey(goods.DBID.ToString()))
+            if (tempGoodsList.ContainsKey(item.Uid))
             {
-                tempNum = tempGoodsList[goods.DBID.ToString()];
+                tempNum = tempGoodsList[item.Uid];
             }
             else
             {
-                tempGoodsList.Add(goods.DBID.ToString(), 0);
+                tempGoodsList.Add(item.Uid, 0);
             }
             if (tempNum + 1 > goods.Inventory)
             {
-                MessageBoxResult result = MessageBox.Show(goods.Name + " 庫存不足", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxResult result = MessageBox.Show(goods.Name + " 的庫存不足", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             else
             {
-                tempGoodsList[goods.DBID.ToString()] = tempNum + 1;
+                tempGoodsList[item.Uid] = tempNum + 1;
             }
 
             ListBoxItem tempItem = new ListBoxItem();
@@ -158,6 +159,9 @@ namespace SalonManager.Views
                 return;
             Service service = MainWindowViewModel.ins().GetServiceById(item.Uid);
 
+            if (tempSerivceList.Contains(item.Uid))
+                tempSerivceList.Remove(item.Uid);
+
             this.ServiceListBox.Items.Remove(item);
             this.ServiceListBox.Items.Refresh();
             info.Service = createListString(this.ServiceListBox);
@@ -177,6 +181,9 @@ namespace SalonManager.Views
             Service service = MainWindowViewModel.ins().GetServiceById(item.Uid);
             if (service == null)
                 return;
+
+            tempSerivceList.Add(item.Uid);
+
             ListBoxItem tempItem = new ListBoxItem();
             tempItem.Uid = item.Uid;
             tempItem.Content = item.Content;
@@ -227,13 +234,51 @@ namespace SalonManager.Views
                 return;
             int res = 0;
             if (!int.TryParse(this.DiscountText.Text, out res))
-                return;
+            {
+                res = 0;
+                this.DiscountText.Text = "0";
+            }
             info.Discount = res;
             updateCost();
         }
-
+        private void PaymentText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (info == null)
+                return;
+            Customer customer = MainWindowViewModel.ins().GetCustomerById(info.customerId);
+            if (customer == null)
+            {
+                //MessageBoxResult result = MessageBox.Show("請先確認顧客名稱", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            int res = 0;
+            if (!int.TryParse(this.PaymentText.Text, out res))
+            {
+                res = 0;
+                this.PaymentText.Text = "0";
+            }
+            if (res > info.Cost)
+            {
+                res = info.Cost;
+                this.PaymentText.Text = info.Cost.ToString();
+            }
+            
+            if (res > customer.Payment)
+            {
+                MessageBoxResult result = MessageBox.Show(customer.Name + " 的預付金額不足", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Error);
+                res = 0;
+                this.PaymentText.Text = "0";
+            }
+            
+            info.Payment = res;
+        }
         public void onSave()
         {
+            if (info == null)
+                return;
+            int bonus = 0;
+            Customer customer = MainWindowViewModel.ins().GetCustomerById(info.customerId);
+            Employee employee = MainWindowViewModel.ins().GetEmployeeById(info.employeeId);
             foreach (KeyValuePair<string, int> pair in tempGoodsList)
             {
                 Goods goods = MainWindowViewModel.ins().GetGoodsById(pair.Key);
@@ -241,12 +286,26 @@ namespace SalonManager.Views
                 {
                     goods.Inventory -= pair.Value;
                     MainWindowViewModel.ins().UpdateData(goods);
+                    bonus += goods.Commission * pair.Value;
                 }
             }
+            foreach (string serviceId in tempSerivceList) {
+                Service service = MainWindowViewModel.ins().GetServiceById(serviceId);
+                if (service != null) {
+                    bonus += (int)(service.Price * employee.Commission / 100);
+                }
+            }
+            info.employeeBonus = bonus;
+            customer.Payment -= info.Payment;
+            employee.monthlyBonus += bonus;
+            MainWindowViewModel.ins().UpdateData(customer);
+            MainWindowViewModel.ins().UpdateData(employee);
         }
         public void onCancel()
         {
 
         }
+
+        
     }
 }

@@ -144,7 +144,26 @@ namespace SalonManager.ViewModels
             }
             return null;
         }
-
+        public Customer GetCustomerById(String id)
+        {
+            foreach (Customer customer in CustomerCollection)
+            {
+                string itemId = customer.DBID.ToString();
+                if (itemId.Equals(id))
+                    return customer;
+            }
+            return null;
+        }
+        public Employee GetEmployeeById(String id)
+        {
+            foreach (Employee employee in EmployeeCollection)
+            {
+                string itemId = employee.DBID.ToString();
+                if (itemId.Equals(id))
+                    return employee;
+            }
+            return null;
+        }
         #region Commands
         public ICommand AddCustomerDataCommand { get { return new DelegateCommand(OnAddCustomerData); } }
         public ICommand AddEmployeeDataCommand { get { return new DelegateCommand(OnAddEmployeeData); } }
@@ -303,7 +322,7 @@ namespace SalonManager.ViewModels
                     RandomHelper.RandomString(10, true),
                     RandomHelper.RandomString(10, true),
                     RandomHelper.RandomInt(19000,50000),
-                    RandomHelper.RandomNumber(0,100,2)
+                    RandomHelper.RandomInt(0, 100)
                     );
                 employee.setDeleteDelegate(DeleteData);
                 employee.setUpdateDelegate(UpdateData);

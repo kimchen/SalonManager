@@ -48,7 +48,8 @@ namespace SalonManager.Models
         {
             if (_deleteDelegate != null)
             {
-                _deleteDelegate(this);
+                if (_deleteDelegate(this))
+                    onDelete();
             }
         }
         #endregion
@@ -70,6 +71,10 @@ namespace SalonManager.Models
                 return _updateDelegate(this);
             }
             return false;
+        }
+        public virtual void onDelete() 
+        {
+            return;
         }
         #endregion
     }

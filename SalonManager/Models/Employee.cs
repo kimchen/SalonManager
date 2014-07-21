@@ -9,11 +9,11 @@ namespace SalonManager.Models
     public class Employee : Person
     {
         public Employee():base(){}
-        public Employee(string name, GENDER_TYPE gender, string tel, string post, int salary, double commission)
+        public Employee(string name, GENDER_TYPE gender, string tel, string post, int basicSalary, int commission)
             : base(name, gender, tel)
         {
             Post = post;
-            Salary = salary;
+            BasicSalary = basicSalary;
             Commission = commission;
         }
 
@@ -37,14 +37,13 @@ namespace SalonManager.Models
         public int salary = 0;
         public int Salary
         {
-            get { return salary; }
-            set { salary = value; }
+            get { return basicSalary + monthlyBonus; }
         }
         #endregion
 
         #region Commission
-        public double commission = 0;
-        public double Commission
+        public int commission = 0;
+        public int Commission
         {
             get { return commission; }
             set { commission = value; }
@@ -60,7 +59,7 @@ namespace SalonManager.Models
 
         public override bool checkData()
         {
-            if (Salary == 0)
+            if (BasicSalary == 0)
                 return false;
             if (Commission == 0)
                 return false;

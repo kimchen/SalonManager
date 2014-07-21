@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SalonManager.Views;
+using SalonManager.ViewModels;
 
 namespace SalonManager.Models
 {
@@ -19,6 +20,7 @@ namespace SalonManager.Models
 
         public string employeeName = "";
         public string employeeId = "";
+        public int employeeBonus = 0;
         public string EmployeeName
         {
             get { return employeeName; }
@@ -81,7 +83,42 @@ namespace SalonManager.Models
         {
             if (customerName.Equals("") || employeeName.Equals(""))
                 return false;
+            if (MainWindowViewModel.ins().GetCustomerById(customerId) == null)
+                return false;
+            if (MainWindowViewModel.ins().GetEmployeeById(employeeId) == null)
+                return false;
+            if (Payment > Cost)
+                return false;
             return base.checkData();
+        }
+
+        public override void onDelete() 
+        {
+            Customer customer = MainWindowViewModel.ins().GetCustomerById(this.customerId);
+            Employee employee = MainWindowViewModel.ins().GetEmployeeById(this.employeeId);
+            string[] goodsIdList = this.customerId.Split(',');
+            foreach (string goodsId in goodsIdList) {
+                Goods goods = MainWindowViewModel.ins().GetGoodsById(goodsId);
+                if (goods != null) { 
+                    goods.Inventory += 1;
+                    MainWindowViewModel.ins().UpdateData(goods);
+                }
+            }
+            if (customer != null && isThisMonth()) 
+            {
+                customer.Payment += this.Payment;
+                MainWindowViewModel.ins().UpdateData(customer);
+            }
+            if (employee != null && isThisMonth())
+            {
+                employee.monthlyBonus -= this.employeeBonus;
+                MainWindowViewModel.ins().UpdateData(employee);
+            }
+        }
+
+        private bool isThisMonth() 
+        {
+            return true;
         }
     }
 }
