@@ -1,0 +1,38 @@
+﻿<Window x:Class="SalonManager.Views.ComsumeDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterScreen"
+        Title="客戶消費紀錄資料" Height="600" Width="800">
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <TextBlock Name="CustomerName"  Text="XXX" Padding="5,5" Foreground="Blue"/>
+            <TextBlock Text="消費紀錄清單" Padding="5,5"/>
+            <DataGrid Name="ComsumeGrid" Width="800" Height="400">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding DateString}"
+                                        IsReadOnly="True"
+                                        Header="日期" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding EmployeeName}"
+                                        IsReadOnly="True"
+                                        Header="服務員工" Foreground="Blue" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding ConsumerGoods}"
+                                        IsReadOnly="True"
+                                        Header="消費物品" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding Service}"
+                                        IsReadOnly="True"
+                                        Header="服務內容" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding Discount}"
+                                        IsReadOnly="True"
+                                        Header="折扣" Foreground="Green" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding Payment}"
+                                        IsReadOnly="True"
+                                        Header="預付金扣抵" Foreground="Red" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding Cost}"
+                                        IsReadOnly="True"
+                                        Header="總金額" Foreground="Red" Width="1*"/>
+                </DataGrid.Columns>
+            </DataGrid>      
+        </StackPanel>
+        <Button Content="離開" HorizontalAlignment="Center"  Margin="5" Name="CloseButton" VerticalAlignment="Bottom" Foreground="White" Background="Red" Click="CloseButton_Click" />
+    </Grid>
+</Window>

@@ -20,7 +20,7 @@ namespace SalonManager.Helpers
         private string password = "1234";
         private SQLiteConnection connection = null;
 
-        private Dictionary<string, Type> tableMap = new Dictionary<string, Type>() { { "customerTable", typeof(Customer) }, { "employeeTable", typeof(Employee) }, { "goodsTable", typeof(Goods) }, { "serviceTable", typeof(Service) }, { "consumptionsssTable", typeof(DailyConsumption) } };
+        private Dictionary<string, Type> tableMap = new Dictionary<string, Type>() { { "customerTable", typeof(Customer) }, { "employeeTable", typeof(Employee) }, { "goodsTable", typeof(Goods) }, { "serviceTable", typeof(Service) }, { "consumptionTable", typeof(DailyConsumption) } };
 
         public static DBConnection ins()
         {
@@ -132,7 +132,25 @@ namespace SalonManager.Helpers
         {
             connection.Close();
         }
-        public List<T> queryData<T>()
+        public List<T> queryData<T>(Dictionary<string,string> table)
+        {
+            string filter = "";
+            bool isFirst = true;
+            foreach (KeyValuePair<string, string> pair in table)
+            {
+                if (isFirst)
+                {
+                    isFirst = false;
+                    filter += pair.Key + " = '" + pair.Value + "'";
+                }
+                else
+                {
+                    filter += " and " + pair.Key + " = '" + pair.Value + "'";
+                }
+            }
+            return queryData<T>(filter);
+        }
+        public List<T> queryData<T>(string filter = "")
         {
             List<T> list = new List<T>();
             if (connection == null)
@@ -142,7 +160,12 @@ namespace SalonManager.Helpers
             if (tableName == "")
                 return list;
             FieldInfo[] infos = type.GetFields();
-            string queryString = "select * from " + tableName + ";";
+            string filterStr = "";
+            if (!filter.Equals(""))
+            {
+                filterStr = " where " + filter;
+            }
+            string queryString = "select * from " + tableName + filterStr + ";";
             DataSet dataSet = ExecuteQuery(queryString);
             DataTable table = dataSet.Tables[0];
             int dataCount = table.Rows.Count;

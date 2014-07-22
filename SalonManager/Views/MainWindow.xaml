@@ -6,23 +6,27 @@
         mc:Ignorable="d"
 		xmlns:viewModels="clr-namespace:SalonManager.ViewModels"
         xmlns:converters="clr-namespace:SalonManager.Converters"
-        Title="管理系統"
+        Title="美髮沙龍管理系統"
         WindowStartupLocation="CenterScreen"
-        Height="Auto"
-        Width="Auto">
+        Height="900"
+        Width="1200">
     <Window.Resources>
         <viewModels:MainWindowViewModel x:Key="WindowsViewModel"/>
     </Window.Resources>
 
     <Grid DataContext="{StaticResource WindowsViewModel}">
-        <StackPanel Orientation="Vertical">
-            <Border HorizontalAlignment="Left" Margin="20 20 0 0" BorderBrush="Black" BorderThickness="2" Width="Auto">
+        
+        <StackPanel Orientation="Vertical" >
+            <StackPanel Orientation="Horizontal">
+                <Border HorizontalAlignment="Left" Margin="20 20 0 0" BorderBrush="Black" BorderThickness="2" Width="600">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock FontSize="16" VerticalAlignment="Center">搜尋：</TextBlock>
                     <TextBox Name="SearchBox" Width="450" Text="{Binding FilterString , UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Button Padding="20 0" Margin="10 0" Command="{Binding ClearFilter}">清除</Button>
                 </StackPanel>
-            </Border>
+                </Border>
+                <DatePicker Margin="20" SelectedDate="{Binding ChooseDate}" VerticalAlignment="Center"></DatePicker>
+            </StackPanel>
             <TabControl  HorizontalAlignment="Left"  Name="TabControl" VerticalAlignment="Top" Margin="20">
                 <TabItem Header="   客戶資料    " Name="Customers" >
                     <Grid>
@@ -43,20 +47,29 @@
                                         Header="電話" Width="1*"/>
                                     <DataGridTextColumn Binding="{Binding Address}"
                                         IsReadOnly="True"
-                                        Header="地址" Width="2.5*"/>
+                                        Header="地址" Width="2*"/>
                                     <DataGridTemplateColumn Width="1*" Header="預付金">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid>
                                                     <TextBlock Text="{Binding Payment}"  Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                    <Button Content=" + " Foreground="Black" Background="White" Padding="0,0" Command="{Binding DeleteDataCommand}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                                    <Button Content=" + " Foreground="Black" Background="White" Padding="0,0" Command="{Binding AddPaymentCommand}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="消費紀錄" Width="1*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Button Content="打開" Foreground="Black" Background="White" Command="{Binding ComsumeDetailCommand}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Binding="{Binding Comment}"
                                         IsReadOnly="True"
-                                        Header="備註" Width="2*"/>
+                                        Header="備註" Width="1.5*"/>
                                     <DataGridTemplateColumn Width="2*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -106,16 +119,22 @@
                                         Header="職位" Foreground="Purple" Width="1*"/>
                                     <DataGridTextColumn Binding="{Binding BasicSalary}"
                                         IsReadOnly="True"
-                                        Header="基本底薪" Foreground="Brown"  Width="1*"/>
-                                    <DataGridTextColumn Binding="{Binding Salary}"
-                                        IsReadOnly="True"
-                                        Header="本月薪資" Foreground="Red" Width="1*"/>
+                                        Header="基本底薪" Foreground="Red"  Width="1*"/>
+                                    <DataGridTemplateColumn Header="當月業績" Width="1*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Button Content="打開" Foreground="Black" Background="White" Command="{Binding SalaryDetailCommand}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTextColumn Binding="{Binding CommissionString}"
                                         IsReadOnly="True"
-                                        Header="抽成" Foreground="Green" Width="0.5*"/>
+                                        Header="抽成" Foreground="Green" Width="1*"/>
                                     <DataGridTextColumn Binding="{Binding Comment}"
                                         IsReadOnly="True"
-                                        Header="備註" Width="2*"/>
+                                        Header="備註" Width="1.5*"/>
                                     <DataGridTemplateColumn Width="2*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -156,9 +175,16 @@
                                     <DataGridTextColumn Binding="{Binding Price}"
                                         IsReadOnly="True"
                                         Header="價格" Foreground="Red" Width="2*"/>
-                                    <DataGridTextColumn Binding="{Binding Inventory}"
-                                        IsReadOnly="True"
-                                        Header="庫存" Width="2*"/>
+                                    <DataGridTemplateColumn Width="2*" Header="庫存">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <TextBlock Text="{Binding Inventory}"  HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                    <Button Content=" + " Foreground="Black" Background="White" Padding="0,0" Command="{Binding AddInventoryCommand}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTextColumn Binding="{Binding Commission}"
                                         IsReadOnly="True"
                                         Header="抽成金額" Foreground="Green" Width="2*"/>
@@ -241,7 +267,7 @@
                                         Header="客戶名稱" Foreground="Blue" Width="1*" />
                                     <DataGridTextColumn Binding="{Binding EmployeeName}"
                                         IsReadOnly="True"
-                                        Header="服務員工" Foreground="Purple" Width="1*"/>
+                                        Header="服務員工" Foreground="Brown" Width="1*"/>
                                     <DataGridTextColumn Binding="{Binding ConsumerGoods}"
                                         IsReadOnly="True"
                                         Header="消費物品" Width="1.5*"/>
@@ -284,8 +310,8 @@
             </TabControl>
         </StackPanel>
         <TextBlock VerticalAlignment="Top"
-                   HorizontalAlignment="Right">
-                    <Run Text="(made with " /><Hyperlink NavigateUri="http://visualstudiogallery.msdn.microsoft.com/970005b8-ee15-4295-9960-375e6ea1276c"
-                                                                 RequestNavigate="Hyperlink_RequestNavigate"><Run Text="WPF MVVM project template" /></Hyperlink><Run Text=")" /></TextBlock>
+                   HorizontalAlignment="Right" Margin="10" FontSize="15">
+                    <Run Text="(Made By " /><Hyperlink NavigateUri="mailto://ckkimchen@gmail.com"
+                                                                 RequestNavigate="Hyperlink_RequestNavigate"><Run Text="KimWorks" /></Hyperlink><Run Text=")" /></TextBlock>
     </Grid>
 </Window>

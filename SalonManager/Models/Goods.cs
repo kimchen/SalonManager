@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SalonManager.ViewModels;
+using System.Windows.Input;
+using SalonManager.Views;
+using SalonManager.Helpers;
 
 namespace SalonManager.Models
 {
@@ -64,6 +68,22 @@ namespace SalonManager.Models
             if (Inventory < 0)
                 return false;
             return base.checkData();
+        }
+
+        public ICommand AddInventoryCommand { get { return new DelegateCommand(OnAddInventoryCommand); } }
+        private void onInputAddInventory(int num)
+        {
+            if (num == 0)
+                return;
+            this.Inventory += num;
+            MainWindowViewModel.ins().UpdateData(this);
+        }
+        private void OnAddInventoryCommand()
+        {
+            InputNumWindow window = new InputNumWindow();
+            window.Title = "增加庫存";
+            window.setInputDelegate(onInputAddInventory);
+            window.ShowDialog();
         }
     }
 }

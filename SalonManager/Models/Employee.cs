@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SalonManager.Views;
+using System.Windows.Input;
+using SalonManager.ViewModels;
+using SalonManager.Helpers;
 
 namespace SalonManager.Models
 {
@@ -64,6 +67,19 @@ namespace SalonManager.Models
             if (Commission == 0)
                 return false;
             return base.checkData();
+        }
+        public ICommand SalaryDetailCommand { get { return new DelegateCommand(OnSalaryDetailCommand); } }
+        private void OnSalaryDetailCommand()
+        {
+            EmployeeDetailWindow window = new EmployeeDetailWindow();
+            Dictionary<string,string> filter = new Dictionary<string,string>();
+            DateTime date = MainWindowViewModel.ins().ChooseDate;
+            filter.Add("year",date.Year.ToString());
+            filter.Add("month",date.Month.ToString());
+            filter.Add("employeeId", this.DBID.ToString());
+            List<DailyConsumption> resultsList = DBConnection.ins().queryData<DailyConsumption>(filter);
+            window.setData(this, resultsList);
+            window.ShowDialog();
         }
     }
 

@@ -19,17 +19,18 @@ namespace SalonManager.ViewModels
             return instance;
         }
 
-        #region MyDateTime
-        private DateTime _myDateTime;
-        public DateTime MyDateTime
+        #region ChooseDate
+        private DateTime _chooseDate;
+        public DateTime ChooseDate
         {
-            get { return _myDateTime; }
+            get { return _chooseDate; }
             set
             {
-                if (_myDateTime != value)
+                if (_chooseDate != value)
                 {
-                    _myDateTime = value;
-                    RaisePropertyChanged(() => MyDateTime);
+                    _chooseDate = value;
+                    RaisePropertyChanged(() => ChooseDate);
+                    LoadDaliyConsumption();
                 }
             }
         }
@@ -179,8 +180,10 @@ namespace SalonManager.ViewModels
         {
             initCollection();
             LoadDBData();
+            ChooseDate = System.DateTime.Now;
             //RandomizeData();
             instance = this;
+            
         }
         #endregion
 
@@ -303,13 +306,22 @@ namespace SalonManager.ViewModels
                 service.setUpdateDelegate(UpdateData);
                 ServiceCollection.Add(service);
             }
-            List<DailyConsumption> dailyConsumptionList = DBConnection.ins().queryData<DailyConsumption>();
+        }
+        private void LoadDaliyConsumption()
+        {
+            Dictionary<string, string> filter = new Dictionary<string, string>();
+            filter.Add("year", ChooseDate.Year.ToString());
+            filter.Add("month", ChooseDate.Month.ToString());
+            filter.Add("day", ChooseDate.Day.ToString());
+            DailyConsumptionCollection = new ObservableCollection<DailyConsumption>();
+            List<DailyConsumption> dailyConsumptionList = DBConnection.ins().queryData<DailyConsumption>(filter);
             foreach (DailyConsumption dailyConsumption in dailyConsumptionList)
             {
                 dailyConsumption.setDeleteDelegate(DeleteData);
                 dailyConsumption.setUpdateDelegate(UpdateData);
                 DailyConsumptionCollection.Add(dailyConsumption);
             }
+            DailyConsumptionView = CollectionViewSource.GetDefaultView(DailyConsumptionCollection);
         }
         private void RandomizeData()
         {
@@ -386,9 +398,10 @@ namespace SalonManager.ViewModels
             {
                 if (CustomerCollection.Contains((Customer)target))
                 {
-                    int index = CustomerCollection.IndexOf((Customer)target);
-                    CustomerCollection.RemoveAt(index);
-                    CustomerCollection.Insert(index, (Customer)target);
+                    //int index = CustomerCollection.IndexOf((Customer)target);
+                    //CustomerCollection.RemoveAt(index);
+                    //CustomerCollection.Insert(index, (Customer)target);
+                    CustomerView.Refresh();
                     DBConnection.ins().updateData<Customer>(target);
                 }
                 else{
@@ -402,9 +415,10 @@ namespace SalonManager.ViewModels
             {
                 if (EmployeeCollection.Contains((Employee)target))
                 {
-                    int index = EmployeeCollection.IndexOf((Employee)target);
-                    EmployeeCollection.RemoveAt(index);
-                    EmployeeCollection.Insert(index, (Employee)target);
+                    //int index = EmployeeCollection.IndexOf((Employee)target);
+                    //EmployeeCollection.RemoveAt(index);
+                    //EmployeeCollection.Insert(index, (Employee)target);
+                    EmployeeView.Refresh();
                     DBConnection.ins().updateData<Employee>(target);
                 }
                 else
@@ -419,9 +433,10 @@ namespace SalonManager.ViewModels
             {
                 if (GoodsCollection.Contains((Goods)target))
                 {
-                    int index = GoodsCollection.IndexOf((Goods)target);
-                    GoodsCollection.RemoveAt(index);
-                    GoodsCollection.Insert(index, (Goods)target);
+                    //int index = GoodsCollection.IndexOf((Goods)target);
+                    //GoodsCollection.RemoveAt(index);
+                    //GoodsCollection.Insert(index, (Goods)target);
+                    GoodsView.Refresh();
                     DBConnection.ins().updateData<Goods>(target);
                 }
                 else
@@ -436,9 +451,10 @@ namespace SalonManager.ViewModels
             {
                 if (ServiceCollection.Contains((Service)target))
                 {
-                    int index = ServiceCollection.IndexOf((Service)target);
-                    ServiceCollection.RemoveAt(index);
-                    ServiceCollection.Insert(index, (Service)target);
+                    //int index = ServiceCollection.IndexOf((Service)target);
+                    //ServiceCollection.RemoveAt(index);
+                    //ServiceCollection.Insert(index, (Service)target);
+                    ServiceView.Refresh();
                     DBConnection.ins().updateData<Service>(target);
                 }
                 else
@@ -453,9 +469,10 @@ namespace SalonManager.ViewModels
             {
                 if (DailyConsumptionCollection.Contains((DailyConsumption)target))
                 {
-                    int index = DailyConsumptionCollection.IndexOf((DailyConsumption)target);
-                    DailyConsumptionCollection.RemoveAt(index);
-                    DailyConsumptionCollection.Insert(index, (DailyConsumption)target);
+                    //int index = DailyConsumptionCollection.IndexOf((DailyConsumption)target);
+                    //DailyConsumptionCollection.RemoveAt(index);
+                    //DailyConsumptionCollection.Insert(index, (DailyConsumption)target);
+                    DailyConsumptionView.Refresh();
                     DBConnection.ins().updateData<DailyConsumption>(target);
                 }
                 else

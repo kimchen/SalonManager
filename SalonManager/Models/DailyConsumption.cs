@@ -10,6 +10,22 @@ namespace SalonManager.Models
     public class DailyConsumption : BaseData
     {
         public DailyConsumption() : base() { }
+
+        public int year = 0;
+        public int month = 0;
+        public int day = 0;
+        public void setDate(DateTime date)
+        {
+            year = date.Year;
+            month = date.Month;
+            day = date.Day;
+        }
+        public string DateString
+        {
+            get { return year + "/" + month + "/" + day; }
+            set {}
+        }
+
         public string customerName = "";
         public string customerId = "";
         public string CustomerName
@@ -25,6 +41,11 @@ namespace SalonManager.Models
         {
             get { return employeeName; }
             set { employeeName = value; }
+        }
+        public int EmployeeBonus
+        {
+            get { return employeeBonus; }
+            set { employeeBonus = value; }
         }
 
         public string consumerGoodsId = "";
@@ -104,21 +125,11 @@ namespace SalonManager.Models
                     MainWindowViewModel.ins().UpdateData(goods);
                 }
             }
-            if (customer != null && isThisMonth()) 
+            if (customer != null) 
             {
                 customer.Payment += this.Payment;
                 MainWindowViewModel.ins().UpdateData(customer);
             }
-            if (employee != null && isThisMonth())
-            {
-                employee.monthlyBonus -= this.employeeBonus;
-                MainWindowViewModel.ins().UpdateData(employee);
-            }
-        }
-
-        private bool isThisMonth() 
-        {
-            return true;
         }
     }
 }

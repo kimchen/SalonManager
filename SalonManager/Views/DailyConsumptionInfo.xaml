@@ -13,6 +13,12 @@
                 VerticalAlignment="Top">
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="日期" Name="Date" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBlock Name="DateText" Style="{StaticResource InfoTxtStyle}" Width="150"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="客戶名稱" Name="CustomerName" Style="{StaticResource InfoTxtStyle}"/>
                     <ComboBox Name="CustomerNameBox" Width="150" Margin="5" SelectionChanged="CustomerNameBox_SelectionChanged">
                     </ComboBox>
@@ -30,7 +36,7 @@
                     <TextBlock Text="消費產品" Name="ConsumerGoods" Style="{StaticResource InfoTxtStyle}"/>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <ListBox Name="ConsumerGoodsListBox" MinHeight="50" Width="150" Margin="5" Height="100" />
+                            <ListBox Name="ConsumerGoodsListBox" MinHeight="50" Width="150" Margin="5" Height="80" />
                             <Button Name="ConsumerGoodsRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ConsumerGoodsRemoveBtn_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -46,7 +52,7 @@
                     <TextBlock Text="服務內容" Name="Service" Style="{StaticResource InfoTxtStyle}"/>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <ListBox Name="ServiceListBox" MinHeight="50" Width="150" Margin="5" Height="100" />
+                            <ListBox Name="ServiceListBox" MinHeight="50" Width="150" Margin="5" Height="80" />
                             <Button Name="ServiceRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ServiceRemoveBtn_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">

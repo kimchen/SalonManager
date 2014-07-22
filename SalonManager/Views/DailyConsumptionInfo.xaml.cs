@@ -33,8 +33,12 @@ namespace SalonManager.Views
         {
             this.DataContext = data;
             info = (DailyConsumption)data;
-            ComboBoxItem item = null;
 
+            DateTime nowDate = MainWindowViewModel.ins().ChooseDate;
+            info.setDate(nowDate);
+            this.DateText.Text = info.DateString;
+
+            ComboBoxItem item = null;
             foreach (Customer custom in MainWindowViewModel.ins().CustomerCollection)
             {
                 item = new ComboBoxItem();
@@ -295,11 +299,10 @@ namespace SalonManager.Views
                     bonus += (int)(service.Price * employee.Commission / 100);
                 }
             }
-            info.employeeBonus = bonus;
+            info.EmployeeBonus = bonus;
             customer.Payment -= info.Payment;
-            employee.monthlyBonus += bonus;
             MainWindowViewModel.ins().UpdateData(customer);
-            MainWindowViewModel.ins().UpdateData(employee);
+            //MainWindowViewModel.ins().UpdateData(employee);
         }
         public void onCancel()
         {

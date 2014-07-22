@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SalonManager.Views;
+using SalonManager.Helpers;
+using SalonManager.ViewModels;
+using System.Windows.Input;
 
 namespace SalonManager.Models
 {
@@ -38,5 +41,32 @@ namespace SalonManager.Models
         {
             return base.checkData();
         }
+
+        public ICommand AddPaymentCommand { get { return new DelegateCommand(OnAddPaymentCommand); } }
+        private void onInputAddPayment(int num)
+        {
+            if (num == 0)
+                return;
+            this.Payment += num;
+            MainWindowViewModel.ins().UpdateData(this);
+        }
+        private void OnAddPaymentCommand()
+        {
+            InputNumWindow window = new InputNumWindow();
+            window.Title = "增加預付金";
+            window.setInputDelegate(onInputAddPayment);
+            window.ShowDialog();
+        }
+        public ICommand ComsumeDetailCommand { get { return new DelegateCommand(OnComsumeDetailCommand); } }
+        private void OnComsumeDetailCommand()
+        {
+            ComsumeDetailWindow window = new ComsumeDetailWindow();
+            Dictionary<string,string> filter = new Dictionary<string,string>();
+            filter.Add("customerId", this.DBID.ToString());
+            List<DailyConsumption> resultsList = DBConnection.ins().queryData<DailyConsumption>(filter);
+            window.setData(this, resultsList);
+            window.ShowDialog();
+        }
+        
     }
 }

@@ -5,14 +5,14 @@
         <Setter Property="FontWeight"
                 Value="Bold" />
         <Setter Property="Padding"
-                Value="30 5" />
-        <Setter Property="MaxHeight"
-                Value="20" />
+                Value="20 5" />
+        <Setter Property="Height"
+                Value="30" />
     </Style>
 
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Width"
-                Value="200" />
+                Value="300" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="Margin"
@@ -43,7 +43,7 @@
     </Style>
     <Style TargetType="{x:Type DataGrid}">
         <Setter Property="Width"
-                Value="800" />
+                Value="1000" />
         <Setter Property="Height"
                 Value="600" />
         <Setter Property="AutoGenerateColumns"
