@@ -309,9 +309,15 @@
                 </TabItem>
             </TabControl>
         </StackPanel>
-        <TextBlock VerticalAlignment="Top"
-                   HorizontalAlignment="Right" Margin="10" FontSize="15">
-                    <Run Text="(Made By " /><Hyperlink NavigateUri="mailto://ckkimchen@gmail.com"
-                                                                 RequestNavigate="Hyperlink_RequestNavigate"><Run Text="KimWorks" /></Hyperlink><Run Text=")" /></TextBlock>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
+            <TextBlock FontSize="15">
+                <Run Text="(Made By " />
+                <Hyperlink NavigateUri="mailto://ckkimchen@gmail.com" RequestNavigate="Hyperlink_RequestNavigate">
+                <Run Text="KimWorks" />
+                </Hyperlink>
+                <Run Text=")" />
+            </TextBlock>
+            <Button Name="BackUpDB" Click="BackUpDB_Click" Content="備份資料庫"></Button>
+        </StackPanel>
     </Grid>
 </Window>

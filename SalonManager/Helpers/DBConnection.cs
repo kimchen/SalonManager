@@ -16,7 +16,7 @@ namespace SalonManager.Helpers
         private static DBConnection mInstance = null;
         private static int COMMAND_TIME_OUT = 30;
 
-        private string path = "sqlDB.db";
+        public static string path = "sqlDB.db";
         private string password = "1234";
         private SQLiteConnection connection = null;
 
@@ -116,6 +116,8 @@ namespace SalonManager.Helpers
         }
         private DataSet ExecuteQuery(string cmd, params object[] p)
         {
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
             SQLiteCommand command = MakeCommand(cmd,p);
             DataSet ds = new DataSet();
             SQLiteDataAdapter da = new SQLiteDataAdapter(command);
@@ -124,6 +126,8 @@ namespace SalonManager.Helpers
         }
         private int ExecuteNoQuery(string cmd, params object[] p)
         {
+            if (connection.State == ConnectionState.Closed)
+                connection.Open();
             SQLiteCommand command = MakeCommand(cmd, p);
             return command.ExecuteNonQuery();
         }
