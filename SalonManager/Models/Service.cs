@@ -35,9 +35,20 @@ namespace SalonManager.Models
         }
         #endregion
 
+        #region Commission
+        public int commission = 0;
+        public int Commission
+        {
+            get { return commission; }
+            set { commission = value; }
+        }
+        #endregion
+
         public override bool checkData()
         {
             if (Name.Equals(""))
+                return false;
+            if (Commission > Price)
                 return false;
             return base.checkData();
         }

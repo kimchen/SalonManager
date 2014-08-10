@@ -70,33 +70,55 @@ namespace SalonManager.Helpers
         {
             if (connection == null)
                 return;
-            if(connection.GetSchema("Tables").Select("TABLE_NAME = '" + tableName + "'").Length <= 0){
+            if (connection.GetSchema("Tables").Select("TABLE_NAME = '" + tableName + "'").Length <= 0)
+            {
                 string createTxt = "create table " + tableName + "( dbid integer primary key ";
                 FieldInfo[] infos = type.GetFields();
                 foreach (FieldInfo info in infos)
                 {
                     if (info.Name == "dbid")
                         continue;
-                    if (info.FieldType == typeof(int))
-                    {
-                        createTxt += "," + info.Name + " INT";
-                    }
-                    else if (info.FieldType == typeof(string))
-                    {
-                        createTxt += "," + info.Name + " VARCHAR(256)";
-                    }
-                    else if (info.FieldType == typeof(float))
-                    {
-                        createTxt += "," + info.Name + " FLOAT";
-                    }
-                    else if (info.FieldType == typeof(double))
-                    {
-                        createTxt += "," + info.Name + " DOUBLE";
-                    }
+                    createTxt += "," + info.Name + " " + fieldToDataType(info.FieldType);
                 }
                 createTxt += ");";
                 ExecuteNoQuery(createTxt, null);
             }
+            else {
+                string describeTxt = "PRAGMA table_info(" + tableName + ");";
+                DataSet dataSet = ExecuteQuery(describeTxt, null);
+                DataTable table = dataSet.Tables[0];
+                int dataCount = table.Rows.Count;
+                List<string> nameList = new List<string>();
+                for (int i = 0; i < dataCount; i++) {
+                    nameList.Add((string)table.Rows[i]["name"]);
+                }
+                FieldInfo[] infos = type.GetFields();
+                foreach (FieldInfo info in infos) {
+                    if (!nameList.Contains(info.Name)){
+                        string addTxt = "alter table " + tableName + " add column " + info.Name + " " + fieldToDataType(info.FieldType) + ";";
+                        ExecuteNoQuery(addTxt, null);
+                    }
+                }
+            }
+        }
+        private string fieldToDataType(Type type) {
+            if (type == typeof(int))
+            {
+                return "INT";
+            }
+            else if (type == typeof(string))
+            {
+                return "VARCHAR(256)";
+            }
+            else if (type == typeof(float))
+            {
+                return "FLOAT";
+            }
+            else if (type == typeof(double))
+            {
+                return "DOUBLE";
+            }
+            return "";
         }
         private SQLiteCommand MakeCommand(string cmd, params object[] p)
         {
@@ -117,7 +139,7 @@ namespace SalonManager.Helpers
         private DataSet ExecuteQuery(string cmd, params object[] p)
         {
             if (connection.State == ConnectionState.Closed)
-                connection.Open();
+                initConnection();
             SQLiteCommand command = MakeCommand(cmd,p);
             DataSet ds = new DataSet();
             SQLiteDataAdapter da = new SQLiteDataAdapter(command);
@@ -127,7 +149,7 @@ namespace SalonManager.Helpers
         private int ExecuteNoQuery(string cmd, params object[] p)
         {
             if (connection.State == ConnectionState.Closed)
-                connection.Open();
+                initConnection();
             SQLiteCommand command = MakeCommand(cmd, p);
             return command.ExecuteNonQuery();
         }
@@ -181,14 +203,17 @@ namespace SalonManager.Helpers
                 {
                     
                     object fieldData = table.Rows[i][info.Name];
-                    if (fieldData != null)
+                    if (fieldData != null && !fieldData.ToString().Equals(""))
                     {
                         if (info.Name == "dbid")
                         {
                             int id = int.Parse(fieldData.ToString());
                             info.SetValue(data, id);
                         }
-                        else
+                        else if (info.FieldType == typeof(bool)) {
+                            bool res = bool.Parse(fieldData.ToString());
+                            info.SetValue(data, res);
+                        }else
                         {
                             info.SetValue(data, fieldData);
                         }

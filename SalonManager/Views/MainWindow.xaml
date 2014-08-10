@@ -227,7 +227,10 @@
                                         Header="服務名稱" Foreground="Blue" Width="4*" />
                                     <DataGridTextColumn Binding="{Binding Price}"
                                         IsReadOnly="True"
-                                        Header="價格" Foreground="Red" Width="4*"/>
+                                        Header="價格" Foreground="Red" Width="3*"/>
+                                    <DataGridTextColumn Binding="{Binding Commission}"
+                                        IsReadOnly="True"
+                                        Header="抽成金額" Foreground="Green" Width="3*"/>
                                     <DataGridTemplateColumn Width="2*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -307,17 +310,31 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
+                <TabItem Header="   系統設定    " Name="DataBaseSetting">
+                    <Grid>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <Button Name="BackUpDB" Click="BackUpDB_Click" Content="匯出資料庫" Margin="10"></Button>
+                            <Button Name="ImportDB" Click="ImportDB_Click"  Content="匯入資料庫" Margin="10"></Button>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
             </TabControl>
         </StackPanel>
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
             <TextBlock FontSize="15">
+                <Run Text="Made By KimWorks" />
+            </TextBlock>
+            <TextBlock FontSize="15">
+                <Run Text="E-Mail : ckkimchen@gmail.com" />
+            </TextBlock>
+            <!--<TextBlock FontSize="15">
                 <Run Text="(Made By " />
                 <Hyperlink NavigateUri="mailto://ckkimchen@gmail.com" RequestNavigate="Hyperlink_RequestNavigate">
                 <Run Text="KimWorks" />
                 </Hyperlink>
                 <Run Text=")" />
             </TextBlock>
-            <Button Name="BackUpDB" Click="BackUpDB_Click" Content="備份資料庫"></Button>
+            <Button Name="BackUpDB" Click="BackUpDB_Click" Content="備份資料庫"></Button>-->
         </StackPanel>
     </Grid>
 </Window>

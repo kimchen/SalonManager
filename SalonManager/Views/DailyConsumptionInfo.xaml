@@ -19,16 +19,17 @@
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="客戶名稱" Name="CustomerName" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBlock Text="客戶" Name="CustomerName" Style="{StaticResource InfoTxtStyle}"/>
                     <ComboBox Name="CustomerNameBox" Width="150" Margin="5" SelectionChanged="CustomerNameBox_SelectionChanged">
                     </ComboBox>
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="服務員工" Name="EmployeeName" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBlock Text="設計師" Name="EmployeeName" Style="{StaticResource InfoTxtStyle}"/>
                     <ComboBox Name="EmployeeNameBox" Width="150" Margin="5" SelectionChanged="EmployeeNameBox_SelectionChanged">
                     </ComboBox>
+                    <CheckBox Content="指定" VerticalAlignment="Center" IsChecked="{Binding IsSpecify}"/>
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">

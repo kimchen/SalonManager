@@ -4,6 +4,7 @@ using System.Windows.Navigation;
 using System.IO;
 using Microsoft.Win32;
 using SalonManager.Helpers;
+
 namespace SalonManager.Views
 {
     /// <summary>
@@ -31,16 +32,44 @@ namespace SalonManager.Views
             if (res.HasValue && res.Value)
             {
                 DBConnection.ins().closeDb();
-                StreamWriter sw = new StreamWriter(dialog.OpenFile());
-                StreamReader sr = new StreamReader(DBConnection.path);
-                char[] buffer = new char[1024];
-                if (sr.Read(buffer, 0, 1024) > 0)
+                Stream stream = dialog.OpenFile();
+                FileStream fs = new FileStream(DBConnection.path, FileMode.OpenOrCreate);
+                byte[] buffer = new byte[1024];
+                int count = 0;
+                while ((count = fs.Read(buffer, 0, 1024)) > 0)
                 {
-                    sw.Write(buffer);
+                    stream.Write(buffer, 0, count);
                 }
-                sw.Close();
-                sr.Close();
+                stream.Close();
+                fs.Close();
             }
+        }
+
+        private void ImportDB_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.DefaultExt = ".db";
+            dialog.Filter = "DataBase(.db)|*.db";
+            bool? res = dialog.ShowDialog();
+            if (res.HasValue && res.Value) {
+                DBConnection.ins().closeDb();
+                Stream stream = dialog.OpenFile();
+                FileStream fs = new FileStream(DBConnection.path, FileMode.OpenOrCreate);
+                byte[] buffer = new byte[1024];
+                int count = 0;
+                while ((count = stream.Read(buffer, 0, 1024)) > 0)
+                {
+                    fs.Write(buffer, 0, count);
+                }
+                stream.Close();
+                fs.Close();
+                MessageBoxResult result = MessageBox.Show("匯入資料庫需重開系統", "確認視窗", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (result == MessageBoxResult.OK) {
+                    System.Diagnostics.Process.Start(System.Windows.Application.ResourceAssembly.Location);
+                    System.Windows.Application.Current.Shutdown();
+                }
+            }
+            
         }
     }
 }

@@ -23,6 +23,12 @@
                     <TextBox Text="{Binding Price}" Name="PriceText"/>
                 </StackPanel>
             </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="抽成金額" Name="Commission" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Commission}" Name="CommissionText"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </Page>

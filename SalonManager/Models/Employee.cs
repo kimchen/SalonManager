@@ -64,8 +64,6 @@ namespace SalonManager.Models
         {
             if (BasicSalary == 0)
                 return false;
-            if (Commission == 0)
-                return false;
             return base.checkData();
         }
         public ICommand SalaryDetailCommand { get { return new DelegateCommand(OnSalaryDetailCommand); } }

@@ -39,8 +39,18 @@ namespace SalonManager.Models
         public int employeeBonus = 0;
         public string EmployeeName
         {
-            get { return employeeName; }
+            get {
+                if (!IsSpecify)
+                    return employeeName;
+                else
+                    return employeeName + " (指定)";
+            }
             set { employeeName = value; }
+        }
+        public bool isSpecify = false;
+        public bool IsSpecify {
+            get { return isSpecify; }
+            set { isSpecify = value; }
         }
         public int EmployeeBonus
         {
