@@ -41,7 +41,8 @@
                             <Button Name="ConsumerGoodsRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ConsumerGoodsRemoveBtn_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <ComboBox Name="ConsumerGoodsAddBox" Width="150" Margin="5"/>
+                            <ComboBox Name="ConsumerGoodsAddBox" Width="120" Margin="5"/>
+                            <ComboBox Name="GoodsProviderAddBox" Width="120" Margin="5"/>
                             <Button Name="ConsumerGoodsAddBtn" Content="加入" Foreground="Black" Background="LightBlue"  Height="30" Padding="10,0" Click="ConsumerGoodsAddBtn_Click"/>
                         </StackPanel>
                     </StackPanel>
@@ -57,7 +58,8 @@
                             <Button Name="ServiceRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ServiceRemoveBtn_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <ComboBox Name="ServiceAddBox" Width="150" Margin="5"/>
+                            <ComboBox Name="ServiceAddBox" Width="120" Margin="5"/>
+                            <ComboBox Name="ServiceProviderAddBox" Width="120" Margin="5"/>
                             <Button Name="ServiceAddBtn" Content="加入" Foreground="Black" Background="LightBlue"  Height="30" Padding="10,0" Click="ServiceAddBtn_Click"/>
                         </StackPanel>
                     </StackPanel>

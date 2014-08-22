@@ -24,6 +24,7 @@ namespace SalonManager.Views
     {
         private DailyConsumption info = null;
         private Dictionary<string, int> tempGoodsList = new Dictionary<string, int>();
+        private Dictionary<string, int> supporterList = new Dictionary<string, int>();
         private List<string> tempSerivceList = new List<string>();
         public DailyConsumptionInfo()
         {
@@ -53,6 +54,14 @@ namespace SalonManager.Views
                 item.Uid = employee.DBID.ToString();
                 item.Content = employee.Name;
                 this.EmployeeNameBox.Items.Add(item);
+                item = new ComboBoxItem();
+                item.Uid = employee.DBID.ToString();
+                item.Content = employee.Name;
+                this.GoodsProviderAddBox.Items.Add(item);
+                item = new ComboBoxItem();
+                item.Uid = employee.DBID.ToString();
+                item.Content = employee.Name;
+                this.ServiceProviderAddBox.Items.Add(item);
             }
 
             foreach (Goods goods in MainWindowViewModel.ins().GoodsCollection)
@@ -100,16 +109,26 @@ namespace SalonManager.Views
             ListBoxItem item = (ListBoxItem)this.ConsumerGoodsListBox.SelectedItem;
             if (item == null)
                 return;
-            Goods goods = MainWindowViewModel.ins().GetGoodsById(item.Uid);
-            if (tempGoodsList.ContainsKey(item.Uid))
+            string itemId = item.Uid;
+            string providerId = "";
+            string[] strs = item.Uid.Split('-');
+            if (strs.Length >= 2)
             {
-                tempGoodsList[item.Uid] -= 1;
+                itemId = strs[0];
+                providerId = strs[1];
+            }
+            Goods goods = MainWindowViewModel.ins().GetGoodsById(itemId);
+            if (tempGoodsList.ContainsKey(itemId))
+            {
+                tempGoodsList[itemId] -= 1;
+            }
+            if (!providerId.Equals("") && supporterList.ContainsKey(providerId))
+            {
+                supporterList[providerId] -= 1;
             }
 
             this.ConsumerGoodsListBox.Items.Remove(item);
             this.ConsumerGoodsListBox.Items.Refresh();
-            info.ConsumerGoods = createListString(this.ConsumerGoodsListBox);
-            info.consumerGoodsId = createListIdString(this.ConsumerGoodsListBox);
             if(goods != null)
                 info.oriCost -= goods.Price;
             updateCost();
@@ -121,9 +140,11 @@ namespace SalonManager.Views
             ComboBoxItem item = (ComboBoxItem)this.ConsumerGoodsAddBox.SelectedItem;
             if (item == null)
                 return;
-            Goods goods = MainWindowViewModel.ins().GetGoodsById(item.Uid);
-            if(goods == null)
+            Goods goods = MainWindowViewModel.ins().GetGoodsById(item.Uid); 
+            if (goods == null)
                 return;
+
+            ComboBoxItem provider = (ComboBoxItem)this.GoodsProviderAddBox.SelectedItem;
 
             int tempNum = 0;
             if (tempGoodsList.ContainsKey(item.Uid))
@@ -144,13 +165,32 @@ namespace SalonManager.Views
                 tempGoodsList[item.Uid] = tempNum + 1;
             }
 
+            if (provider != null)
+            {
+                if (supporterList.ContainsKey(provider.Uid))
+                {
+                    supporterList[provider.Uid] += 1;
+                }
+                else
+                {
+                    supporterList.Add(provider.Uid, 1);
+                }
+                
+            }
+
             ListBoxItem tempItem = new ListBoxItem();
-            tempItem.Uid = item.Uid;
-            tempItem.Content = item.Content;
+            if (provider != null)
+            {
+                tempItem.Uid = item.Uid + "-" + provider.Uid;
+                tempItem.Content = item.Content + "-" + provider.Content;
+            }
+            else
+            {
+                tempItem.Uid = item.Uid;
+                tempItem.Content = item.Content;
+            }
             this.ConsumerGoodsListBox.Items.Add(tempItem);
             this.ConsumerGoodsListBox.Items.Refresh();
-            info.ConsumerGoods = createListString(this.ConsumerGoodsListBox);
-            info.consumerGoodsId = createListIdString(this.ConsumerGoodsListBox);
             info.oriCost += goods.Price;
             updateCost();
         }
@@ -161,15 +201,25 @@ namespace SalonManager.Views
             ListBoxItem item = (ListBoxItem)this.ServiceListBox.SelectedItem;
             if (item == null)
                 return;
-            Service service = MainWindowViewModel.ins().GetServiceById(item.Uid);
-
-            if (tempSerivceList.Contains(item.Uid))
-                tempSerivceList.Remove(item.Uid);
+            
+            string serviceId = item.Uid;
+            string providerId = "";
+            string[] strs = item.Uid.Split('-');
+            if (strs.Length >= 2)
+            {
+                serviceId = strs[0];
+                providerId = strs[1];
+            }
+            Service service = MainWindowViewModel.ins().GetServiceById(serviceId);
+            if (tempSerivceList.Contains(serviceId))
+                tempSerivceList.Remove(serviceId);
+            if (!providerId.Equals("") && supporterList.ContainsKey(providerId))
+            {
+                supporterList[providerId] -= 1;
+            }
 
             this.ServiceListBox.Items.Remove(item);
             this.ServiceListBox.Items.Refresh();
-            info.Service = createListString(this.ServiceListBox);
-            info.serviceId = createListIdString(this.ServiceListBox);
             if (service != null)
                 info.oriCost -= service.Price;
             updateCost();
@@ -185,16 +235,35 @@ namespace SalonManager.Views
             Service service = MainWindowViewModel.ins().GetServiceById(item.Uid);
             if (service == null)
                 return;
+            ComboBoxItem provider = (ComboBoxItem)this.ServiceProviderAddBox.SelectedItem;
 
             tempSerivceList.Add(item.Uid);
+            if (provider != null)
+            {
+                if (supporterList.ContainsKey(provider.Uid))
+                {
+                    supporterList[provider.Uid] += 1;
+                }
+                else
+                {
+                    supporterList.Add(provider.Uid, 1);
+                }
+
+            }
 
             ListBoxItem tempItem = new ListBoxItem();
-            tempItem.Uid = item.Uid;
-            tempItem.Content = item.Content;
+            if (provider != null)
+            {
+                tempItem.Uid = item.Uid + "-" + provider.Uid;
+                tempItem.Content = item.Content + "-" + provider.Content;
+            }
+            else
+            {
+                tempItem.Uid = item.Uid;
+                tempItem.Content = item.Content;
+            }
             this.ServiceListBox.Items.Add(tempItem);
             this.ServiceListBox.Items.Refresh();
-            info.Service = createListString(this.ServiceListBox);
-            info.serviceId = createListIdString(this.ServiceListBox);
             info.oriCost += service.Price;
             updateCost();
         }
@@ -280,7 +349,7 @@ namespace SalonManager.Views
         {
             if (info == null)
                 return;
-            int bonus = 0;
+            //int bonus = 0;
             Customer customer = MainWindowViewModel.ins().GetCustomerById(info.customerId);
             Employee employee = MainWindowViewModel.ins().GetEmployeeById(info.employeeId);
             foreach (KeyValuePair<string, int> pair in tempGoodsList)
@@ -290,16 +359,27 @@ namespace SalonManager.Views
                 {
                     goods.Inventory -= pair.Value;
                     MainWindowViewModel.ins().UpdateData(goods);
-                    bonus += goods.Commission * pair.Value;
+                    //bonus += goods.Commission * pair.Value;
                 }
             }
             foreach (string serviceId in tempSerivceList) {
                 Service service = MainWindowViewModel.ins().GetServiceById(serviceId);
                 if (service != null) {
-                    bonus += (int)(service.Price * employee.Commission / 100);
+                    //bonus += (int)(service.Price * employee.Commission / 100);
                 }
             }
-            info.EmployeeBonus = bonus;
+            foreach (KeyValuePair<string, int> pair in supporterList)
+            {
+                if (pair.Value > 0)
+                {
+                    info.supporterId += pair.Key + ",";
+                }
+            }
+            //info.EmployeeBonus = bonus;
+            info.ConsumerGoods = createListString(this.ConsumerGoodsListBox);
+            info.consumerGoodsId = createListIdString(this.ConsumerGoodsListBox);
+            info.Service = createListString(this.ServiceListBox);
+            info.serviceId = createListIdString(this.ServiceListBox);
             customer.Payment -= info.Payment;
             MainWindowViewModel.ins().UpdateData(customer);
             //MainWindowViewModel.ins().UpdateData(employee);

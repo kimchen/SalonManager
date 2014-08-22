@@ -57,7 +57,7 @@ namespace SalonManager.Models
             get { return employeeBonus; }
             set { employeeBonus = value; }
         }
-
+        public string supporterId = "";
         public string consumerGoodsId = "";
         public string consumerGoods = "";
         public string ConsumerGoods
@@ -127,8 +127,14 @@ namespace SalonManager.Models
         {
             Customer customer = MainWindowViewModel.ins().GetCustomerById(this.customerId);
             Employee employee = MainWindowViewModel.ins().GetEmployeeById(this.employeeId);
-            string[] goodsIdList = this.customerId.Split(',');
-            foreach (string goodsId in goodsIdList) {
+            string[] goodsIdList = this.consumerGoodsId.Split(',');
+            foreach (string tempId in goodsIdList) {
+                string goodsId = tempId;
+                string[] strs = tempId.Split('-');
+                if (strs.Length >= 2)
+                {
+                    goodsId = strs[0];
+                }
                 Goods goods = MainWindowViewModel.ins().GetGoodsById(goodsId);
                 if (goods != null) { 
                     goods.Inventory += 1;
