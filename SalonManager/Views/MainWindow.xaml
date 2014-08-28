@@ -271,6 +271,9 @@
                                     <DataGridTextColumn Binding="{Binding EmployeeName}"
                                         IsReadOnly="True"
                                         Header="服務員工" Foreground="Brown" Width="1*"/>
+                                    <DataGridCheckBoxColumn Binding="{Binding IsSpecify}"
+                                        IsReadOnly="True"
+                                        Header="指定" Width="0.5*"/>
                                     <DataGridTextColumn Binding="{Binding ConsumerGoods}"
                                         IsReadOnly="True"
                                         Header="消費物品" Width="1.5*"/>
@@ -279,7 +282,7 @@
                                         Header="服務內容" Width="1.5*"/>
                                     <DataGridTextColumn Binding="{Binding Discount}"
                                         IsReadOnly="True"
-                                        Header="折扣" Foreground="Green" Width="1*"/>
+                                        Header="折扣" Foreground="Green" Width="0.5*"/>
                                     <DataGridTextColumn Binding="{Binding Payment}"
                                         IsReadOnly="True"
                                         Header="預付金扣抵" Foreground="Red" Width="1*"/>
@@ -307,6 +310,47 @@
                                 Background="Lime"
                                 HorizontalAlignment="Left"
                                 Command="{Binding AddDailyConsumptionDataCommand}" />
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="   當月累計    " Name="MonthlyConsumptions">
+                    <Grid>
+                        <StackPanel Orientation="Vertical"
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                            <DataGrid Name ="MonthlyConsumptionsGrid" ItemsSource="{Binding MonthlyConsumptionView}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding DateString}"
+                                        IsReadOnly="True"
+                                        Header="日期" Width="1*"/>
+                                    <DataGridTextColumn Binding="{Binding CustomerName}"
+                                        IsReadOnly="True"
+                                        Header="客戶名稱" Foreground="Blue" Width="1.5*" />
+                                    <DataGridTextColumn Binding="{Binding EmployeeName}"
+                                        IsReadOnly="True"
+                                        Header="服務員工" Foreground="Brown" Width="1.5*"/>
+                                    <DataGridCheckBoxColumn Binding="{Binding IsSpecify}"
+                                        IsReadOnly="True"
+                                        Header="指定" Width="0.5*"/>
+                                    <DataGridTextColumn Binding="{Binding ConsumerGoods}"
+                                        IsReadOnly="True"
+                                        Header="消費物品" Width="2*"/>
+                                    <DataGridTextColumn Binding="{Binding Service}"
+                                        IsReadOnly="True"
+                                        Header="服務內容" Width="2*"/>
+                                    <DataGridTextColumn Binding="{Binding Cost}"
+                                        IsReadOnly="True"
+                                        Header="總金額" Foreground="Red" Width="1.5*"/>   
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Name="PrintButton"
+                                Content="列印"
+                                Margin="0 10 0 0"
+                                Padding="30,5"
+                                Background="Lime"
+                                HorizontalAlignment="Left"
+                                Click="PrintButton_Click" />
                         </StackPanel>
                     </Grid>
                 </TabItem>

@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowStartupLocation="CenterScreen"
         Title="客戶消費紀錄資料" Height="600" Width="800">
-    <Grid>
+    <Grid Name="DataGrid">
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
             <TextBlock Name="CustomerName"  Text="XXX" Padding="5,5" Foreground="Blue"/>
             <TextBlock Text="消費紀錄清單" Padding="5,5"/>
-            <DataGrid Name="ComsumeGrid" Width="800" Height="400">
+            <DataGrid Name="ComsumeGrid" Width="780" Height="400" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding DateString}"
                                         IsReadOnly="True"
@@ -15,6 +15,9 @@
                     <DataGridTextColumn Binding="{Binding EmployeeName}"
                                         IsReadOnly="True"
                                         Header="服務員工" Foreground="Blue" Width="1*"/>
+                    <DataGridCheckBoxColumn Binding="{Binding IsSpecify}"
+                                        IsReadOnly="True"
+                                        Header="指定" Width="0.33*"/>
                     <DataGridTextColumn Binding="{Binding ConsumerGoods}"
                                         IsReadOnly="True"
                                         Header="消費物品" Width="1*"/>
@@ -33,6 +36,9 @@
                 </DataGrid.Columns>
             </DataGrid>      
         </StackPanel>
-        <Button Content="離開" HorizontalAlignment="Center"  Margin="5" Name="CloseButton" VerticalAlignment="Bottom" Foreground="White" Background="Red" Click="CloseButton_Click" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Button Content="列印" Margin="10" Name="PrintButton" Foreground="White" Background="Lime" Click="PrintButton_Click" />
+            <Button Content="離開" Margin="10" Name="CloseButton" Foreground="White" Background="Red" Click="CloseButton_Click" />       
+        </StackPanel>
     </Grid>
 </Window>

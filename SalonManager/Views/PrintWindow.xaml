@@ -1,0 +1,9 @@
+﻿<Window x:Class="SalonManager.Views.PrintWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PrintWindow" Height="600" Width="800">
+    <Grid>
+        <DocumentViewer Name="DocViewer" Grid.Column ="1" Grid.Row ="0">
+        </DocumentViewer>
+    </Grid>
+</Window>

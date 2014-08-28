@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Navigation;
+using System.Windows.Documents;
 using System.IO;
+using System;
 using Microsoft.Win32;
 using SalonManager.Helpers;
 
@@ -70,6 +72,10 @@ namespace SalonManager.Views
                 }
             }
             
+        }
+        private void PrintButton_Click(object sender, RoutedEventArgs e)
+        {
+            Printer.print(MonthlyConsumptionsGrid);
         }
     }
 }

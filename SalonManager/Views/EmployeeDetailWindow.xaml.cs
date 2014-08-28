@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SalonManager.Models;
+using SalonManager.Helpers;
 using System.ComponentModel;
 using SalonManager.ViewModels;
 
@@ -91,6 +92,11 @@ namespace SalonManager.Views
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void PrintButton_Click(object sender, RoutedEventArgs e)
+        {
+            Printer.print(ResultsGrid);
         }
     }
 }

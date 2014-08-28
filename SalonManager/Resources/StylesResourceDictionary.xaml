@@ -46,6 +46,8 @@
                 Value="1000" />
         <Setter Property="Height"
                 Value="600" />
+        <Setter Property="VerticalScrollBarVisibility"
+                Value="Visible" />
         <Setter Property="AutoGenerateColumns"
                 Value="False" />
         <Setter Property="CanUserAddRows"
