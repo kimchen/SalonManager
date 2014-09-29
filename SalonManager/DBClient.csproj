@@ -102,6 +102,9 @@
     <Compile Include="Models\OtherCost.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\ServiceResult.cs" />
+    <Compile Include="Views\ChangePasswordWindow.xaml.cs">
+      <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ComsumeDetailWindow.xaml.cs">
       <DependentUpon>ComsumeDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -130,6 +133,9 @@
     <Compile Include="Views\OtherCostInfo.xaml.cs">
       <DependentUpon>OtherCostInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PasswordWindow.xaml.cs">
+      <DependentUpon>PasswordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PersonInfo.xaml.cs">
       <DependentUpon>PersonInfo.xaml</DependentUpon>
     </Compile>
@@ -144,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\StylesResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -180,6 +190,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OtherCostInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

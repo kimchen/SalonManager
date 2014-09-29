@@ -460,6 +460,7 @@
                         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
                             <Button Name="BackUpDB" Click="BackUpDB_Click" Content="匯出資料庫" Margin="10"></Button>
                             <Button Name="ImportDB" Click="ImportDB_Click"  Content="匯入資料庫" Margin="10"></Button>
+                            <Button Name="ChangePW" Click="ChangePW_Click"  Content="變更密碼" Margin="10"></Button>
                         </StackPanel>
                     </Grid>
                 </TabItem>

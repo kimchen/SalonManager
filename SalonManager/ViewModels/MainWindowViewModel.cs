@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SalonManager.Helpers;
 using SalonManager.Models;
+using SalonManager.Views;
 using System.Windows;
 using System.Reflection;
 using System.ComponentModel;
@@ -244,6 +245,9 @@ namespace SalonManager.ViewModels
         #region Ctor
         public MainWindowViewModel()
         {
+            PasswordWindow window = new PasswordWindow();
+            window.ShowDialog();
+            //SalonManager.Properties.Settings.Default.Password;
             initCollection();
             LoadDBData();
             ChooseDate = System.DateTime.Now;

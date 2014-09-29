@@ -74,6 +74,12 @@ namespace SalonManager.Views
             
         }
 
+        private void ChangePW_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePasswordWindow window = new ChangePasswordWindow();
+            window.ShowDialog();
+        }
+
         private void PrintYearButton_Click(object sender, RoutedEventArgs e)
         {
             Printer.print(YearlyConsumptionsGrid);

@@ -22,6 +22,7 @@
                     <TextBlock Text="客戶" Name="CustomerName" Style="{StaticResource InfoTxtStyle}"/>
                     <ComboBox Name="CustomerNameBox" Width="150" Margin="5" SelectionChanged="CustomerNameBox_SelectionChanged">
                     </ComboBox>
+                    <TextBox Name="SelectCustomerText" TextChanged="SelectCustomerText_TextChanged" Width="100"/>
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">

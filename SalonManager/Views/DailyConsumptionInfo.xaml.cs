@@ -274,6 +274,24 @@ namespace SalonManager.Views
             updateCost();
         }
 
+        private void SelectCustomerText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tBox = (TextBox)sender;
+            ComboBoxItem item = null;
+            this.CustomerNameBox.Items.Clear();
+            foreach (Customer custom in MainWindowViewModel.ins().CustomerCollection)
+            {
+                if (!tBox.Text.Equals("") && !custom.Name.Contains(tBox.Text))
+                    continue;
+                item = new ComboBoxItem();
+                item.Uid = custom.DBID.ToString();
+                item.Content = custom.Name;
+                this.CustomerNameBox.Items.Add(item);
+            }
+            info.CustomerName = "";
+            info.customerId = "";
+        }
+
         private string createListString(ListBox list)
         {
             string str = "";
