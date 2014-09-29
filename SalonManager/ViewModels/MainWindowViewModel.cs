@@ -29,13 +29,21 @@ namespace SalonManager.ViewModels
                 if (_chooseDate != value)
                 {
                     bool hasChangeMonth = false;
+                    bool hasChangeYear = false;
                     if(_chooseDate.Month != value.Month || _chooseDate.Year != value.Year)
                       hasChangeMonth = true;
+                    if (_chooseDate.Year != value.Year)
+                        hasChangeYear = true;
                     _chooseDate = value;
                     RaisePropertyChanged(() => ChooseDate);
                     LoadDaliyConsumption();
                     if (hasChangeMonth)
+                    {
                         LoadMonthlyConsumption();
+                        LoadOtherCost();
+                    }
+                    if (hasChangeYear)
+                        LoadYearlyConsumption();
                 }
             }
         }
@@ -144,7 +152,43 @@ namespace SalonManager.ViewModels
             set { monthlyConsumptionView = value; RaisePropertyChanged(() => MonthlyConsumptionView); }
         }
         #endregion
-        
+
+        #region YearlyConsumptionCollection
+        private ObservableCollection<DailyConsumption> _yearlyConsumptionCollection;
+        public ObservableCollection<DailyConsumption> YearlyConsumptionCollection
+        {
+            get { return _yearlyConsumptionCollection; }
+            set { _yearlyConsumptionCollection = value; if (YearlyConsumptionView != null)YearlyConsumptionView.Refresh(); }
+        }
+        public ICollectionView yearlyConsumptionView;
+        public ICollectionView YearlyConsumptionView
+        {
+            get { return yearlyConsumptionView; }
+            set { yearlyConsumptionView = value; RaisePropertyChanged(() => YearlyConsumptionView); }
+        }
+        #endregion
+
+        #region OtherCostCollection
+        private ObservableCollection<OtherCost> _otherCostCollection;
+        public ObservableCollection<OtherCost> OtherCostCollection
+        {
+            get { return _otherCostCollection; }
+            set { _otherCostCollection = value; if (OtherCostView != null)OtherCostView.Refresh(); }
+        }
+        public ICollectionView otherCostView;
+        public ICollectionView OtherCostView
+        {
+            get { return otherCostView; }
+            set { otherCostView = value; RaisePropertyChanged(() => OtherCostView); }
+        }
+        private int _totalOtherCost = 0;
+        public int TotalOtherCost 
+        {
+            get { return _totalOtherCost; }
+            set { _totalOtherCost = value; }
+        }
+        #endregion
+
         public Goods GetGoodsById(String id)
         {
             foreach (Goods goods in GoodsCollection)
@@ -191,6 +235,8 @@ namespace SalonManager.ViewModels
         public ICommand AddGoodsDataCommand { get { return new DelegateCommand(OnAddGoodsData); } }
         public ICommand AddServiceDataCommand { get { return new DelegateCommand(OnAddServiceData); } }
         public ICommand AddDailyConsumptionDataCommand { get { return new DelegateCommand(OnAddDailyConsumptionData); } }
+        public ICommand AddOtherCostCommand { get { return new DelegateCommand(OnAddOtherCostData); } }
+        
         public ICommand ClearFilter { get { return new DelegateCommand(OnClearFilter); } }
         public ICommand CloseProgram { get { return new DelegateCommand(OnCloseProgram); } }
         #endregion
@@ -241,6 +287,12 @@ namespace SalonManager.ViewModels
             dailyConsumption.setDeleteDelegate(DeleteData);
             dailyConsumption.PopEditWindowCommand.Execute(null);
         }
+        private void OnAddOtherCostData() {
+            OtherCost otherCost = new OtherCost();
+            otherCost.setUpdateDelegate(UpdateData);
+            otherCost.setDeleteDelegate(DeleteData);
+            otherCost.PopEditWindowCommand.Execute(null);
+        }
         private void OnClearFilter()
         {
             FilterString = "";
@@ -273,8 +325,10 @@ namespace SalonManager.ViewModels
             if (CustomerView != null) CustomerView.Refresh();
             if (DailyConsumptionView != null) DailyConsumptionView.Refresh();
             if (MonthlyConsumptionView != null) MonthlyConsumptionView.Refresh();
+            if (YearlyConsumptionView != null) YearlyConsumptionView.Refresh();
             if (GoodsView != null) GoodsView.Refresh();
             if (ServiceView != null) ServiceView.Refresh();
+            if (OtherCostView != null) OtherCostView.Refresh();
         }
         private void initCollection()
         {
@@ -284,6 +338,8 @@ namespace SalonManager.ViewModels
             ServiceCollection = new ObservableCollection<Service>();
             DailyConsumptionCollection = new ObservableCollection<DailyConsumption>();
             MonthlyConsumptionCollection = new ObservableCollection<DailyConsumption>();
+            YearlyConsumptionCollection = new ObservableCollection<DailyConsumption>();
+            OtherCostCollection = new ObservableCollection<OtherCost>();
 
             EmployeeView = CollectionViewSource.GetDefaultView(EmployeeCollection);
             CustomerView = CollectionViewSource.GetDefaultView(CustomerCollection);
@@ -291,6 +347,8 @@ namespace SalonManager.ViewModels
             ServiceView = CollectionViewSource.GetDefaultView(ServiceCollection);
             DailyConsumptionView = CollectionViewSource.GetDefaultView(DailyConsumptionCollection);
             MonthlyConsumptionView = CollectionViewSource.GetDefaultView(MonthlyConsumptionCollection);
+            YearlyConsumptionView = CollectionViewSource.GetDefaultView(YearlyConsumptionCollection);
+            OtherCostView = CollectionViewSource.GetDefaultView(OtherCostCollection);
 
             EmployeeView.Filter = new Predicate<object>(SearchFilter);
             CustomerView.Filter = new Predicate<object>(SearchFilter);
@@ -298,6 +356,8 @@ namespace SalonManager.ViewModels
             ServiceView.Filter = new Predicate<object>(SearchFilter);
             DailyConsumptionView.Filter = new Predicate<object>(SearchFilter);
             MonthlyConsumptionView.Filter = new Predicate<object>(SearchFilter);
+            YearlyConsumptionView.Filter = new Predicate<object>(SearchFilter);
+            OtherCostView.Filter = new Predicate<object>(SearchFilter);
         }
         private void LoadDBData()
         {
@@ -354,12 +414,56 @@ namespace SalonManager.ViewModels
             filter.Add("month", ChooseDate.Month.ToString());
             MonthlyConsumptionCollection = new ObservableCollection<DailyConsumption>();
             List<DailyConsumption> dailyConsumptionList = DBConnection.ins().queryData<DailyConsumption>(filter);
+            int totalCost = 0;
             foreach (DailyConsumption dailyConsumption in dailyConsumptionList)
             {
+                totalCost += dailyConsumption.Cost;
                 MonthlyConsumptionCollection.Add(dailyConsumption);
             }
+            DailyConsumption tatolConsumption = new DailyConsumption();
+            tatolConsumption.DateString = "本月累計";
+            tatolConsumption.Cost = totalCost;
+            MonthlyConsumptionCollection.Add(tatolConsumption);
             MonthlyConsumptionView = CollectionViewSource.GetDefaultView(MonthlyConsumptionCollection);
-            MonthlyConsumptionView.Filter = new Predicate<object>(SearchFilter);
+            MonthlyConsumptionView.Filter = new Predicate<object>(SearchFilter); 
+        }
+
+        private void LoadOtherCost() {
+            Dictionary<string, string> filter = new Dictionary<string, string>();
+            filter.Add("year", ChooseDate.Year.ToString());
+            filter.Add("month", ChooseDate.Month.ToString());
+            OtherCostCollection = new ObservableCollection<OtherCost>();
+            List<OtherCost> otherCostList = DBConnection.ins().queryData<OtherCost>(filter);
+            TotalOtherCost = 0;
+            foreach (OtherCost otherCost in otherCostList)
+            {
+                TotalOtherCost += otherCost.Cost;
+                otherCost.setDeleteDelegate(DeleteData);
+                otherCost.setUpdateDelegate(UpdateData);
+                OtherCostCollection.Add(otherCost);
+            }
+            OtherCostView = CollectionViewSource.GetDefaultView(OtherCostCollection);
+            OtherCostView.Filter = new Predicate<object>(SearchFilter);
+            RaisePropertyChanged(() => TotalOtherCost);
+        }
+        private void LoadYearlyConsumption()
+        {
+            Dictionary<string, string> filter = new Dictionary<string, string>();
+            filter.Add("year", ChooseDate.Year.ToString());
+            YearlyConsumptionCollection = new ObservableCollection<DailyConsumption>();
+            List<DailyConsumption> dailyConsumptionList = DBConnection.ins().queryData<DailyConsumption>(filter);
+            int totalCost = 0;
+            foreach (DailyConsumption dailyConsumption in dailyConsumptionList)
+            {
+                totalCost += dailyConsumption.Cost;
+                YearlyConsumptionCollection.Add(dailyConsumption);
+            }
+            DailyConsumption tatolConsumption = new DailyConsumption();
+            tatolConsumption.DateString = "今年累計";
+            tatolConsumption.Cost = totalCost;
+            YearlyConsumptionCollection.Add(tatolConsumption);
+            YearlyConsumptionView = CollectionViewSource.GetDefaultView(YearlyConsumptionCollection);
+            YearlyConsumptionView.Filter = new Predicate<object>(SearchFilter);
         }
         private void RandomizeData()
         {
@@ -427,6 +531,14 @@ namespace SalonManager.ViewModels
                 DailyConsumptionCollection.Remove((DailyConsumption)target);
                 DBConnection.ins().deleteData<DailyConsumption>(target);
                 LoadMonthlyConsumption();
+                LoadYearlyConsumption();
+                return true;
+            }
+            else if (target is OtherCost)
+            {
+                OtherCostCollection.Remove((OtherCost)target);
+                DBConnection.ins().deleteData<OtherCost>(target);
+                LoadOtherCost();
                 return true;
             }
             return false;
@@ -445,8 +557,8 @@ namespace SalonManager.ViewModels
                 }
                 else{
                     CustomerCollection.Add((Customer)target);
-                    DBConnection.ins().addData<Customer>(target);
-                    ((Customer)target).dbid = DBConnection.ins().getDataId<Customer>(target);
+                    int id = (int)DBConnection.ins().addData<Customer>(target);
+                    ((Customer)target).dbid = id;
                 }
                 return true;
             }
@@ -463,8 +575,8 @@ namespace SalonManager.ViewModels
                 else
                 {
                     EmployeeCollection.Add((Employee)target);
-                    DBConnection.ins().addData<Employee>(target);
-                    ((Employee)target).dbid = DBConnection.ins().getDataId<Employee>(target);
+                    int id = (int)DBConnection.ins().addData<Employee>(target);
+                    ((Employee)target).dbid = id;
                 }
                 return true;
             }
@@ -481,8 +593,8 @@ namespace SalonManager.ViewModels
                 else
                 {
                     GoodsCollection.Add((Goods)target);
-                    DBConnection.ins().addData<Goods>(target);
-                    ((Goods)target).dbid = DBConnection.ins().getDataId<Goods>(target);
+                    int id = (int)DBConnection.ins().addData<Goods>(target);
+                    ((Goods)target).dbid = id;
                 }
                 return true;
             }
@@ -499,8 +611,8 @@ namespace SalonManager.ViewModels
                 else
                 {
                     ServiceCollection.Add((Service)target);
-                    DBConnection.ins().addData<Service>(target);
-                    ((Service)target).dbid = DBConnection.ins().getDataId<Service>(target);
+                    int id = (int)DBConnection.ins().addData<Service>(target);
+                    ((Service)target).dbid = id;
                 }
                 return true;
             }
@@ -517,10 +629,27 @@ namespace SalonManager.ViewModels
                 else
                 {
                     DailyConsumptionCollection.Add((DailyConsumption)target);
-                    DBConnection.ins().addData<DailyConsumption>(target);
-                    ((DailyConsumption)target).dbid = DBConnection.ins().getDataId<DailyConsumption>(target);
+                    int id = (int)DBConnection.ins().addData<DailyConsumption>(target);
+                    ((DailyConsumption)target).dbid = id;
                 }
                 LoadMonthlyConsumption();
+                LoadYearlyConsumption();
+                return true;
+            }
+            else if (target is OtherCost)
+            {
+                if (OtherCostCollection.Contains((OtherCost)target))
+                {
+                    OtherCostView.Refresh();
+                    DBConnection.ins().updateData<OtherCost>(target);
+                }
+                else
+                {
+                    OtherCostCollection.Add((OtherCost)target);
+                    int id = (int)DBConnection.ins().addData<OtherCost>(target);
+                    ((OtherCost)target).dbid = id;
+                }
+                LoadOtherCost();
                 return true;
             }
             return false;

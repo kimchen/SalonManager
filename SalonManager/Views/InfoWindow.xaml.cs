@@ -62,6 +62,11 @@ namespace SalonManager.Views
                 info = new DailyConsumptionInfo();
                 infoList.Add(info);
             }
+            else if (data is OtherCost)
+            {
+                info = new OtherCostInfo();
+                infoList.Add(info);
+            }
             info.setData(data);
             this.PageFrame.Content = info;
         }

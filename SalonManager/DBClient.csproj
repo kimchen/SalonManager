@@ -99,7 +99,9 @@
     <Compile Include="Models\DailyConsumption.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Goods.cs" />
+    <Compile Include="Models\OtherCost.cs" />
     <Compile Include="Models\Service.cs" />
+    <Compile Include="Models\ServiceResult.cs" />
     <Compile Include="Views\ComsumeDetailWindow.xaml.cs">
       <DependentUpon>ComsumeDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -124,6 +126,9 @@
     </Compile>
     <Compile Include="Views\InputNumWindow.xaml.cs">
       <DependentUpon>InputNumWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OtherCostInfo.xaml.cs">
+      <DependentUpon>OtherCostInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PersonInfo.xaml.cs">
       <DependentUpon>PersonInfo.xaml</DependentUpon>
@@ -171,6 +176,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\InputNumWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OtherCostInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -277,6 +286,11 @@
       <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\01圖.png" />
+    <Resource Include="Image\02英字.png" />
+    <Resource Include="Image\03中字.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

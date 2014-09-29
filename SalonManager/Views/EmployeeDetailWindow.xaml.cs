@@ -14,6 +14,7 @@ using SalonManager.Models;
 using SalonManager.Helpers;
 using System.ComponentModel;
 using SalonManager.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace SalonManager.Views
 {
@@ -28,62 +29,148 @@ namespace SalonManager.Views
         }
         public void setData(Employee data,List<DailyConsumption> list)
         {
+            DateTime date = MainWindowViewModel.ins().ChooseDate;
+            List<DailyConsumption> monthlyList = new List<DailyConsumption>();
+            Dictionary<string, ServiceResult> serviceResultDic = new Dictionary<string, ServiceResult>();
+            List<ServiceResult> serviceResultList = new List<ServiceResult>();
             int totalBonus = 0;
             string employeeId = data.DBID.ToString();
+           
+            ServiceResult specifyService = new ServiceResult();
+            specifyService.ServiceId = "specify";
+            specifyService.ServiceName = "指定設計";
+            serviceResultDic.Add(specifyService.ServiceId, specifyService);
+            ServiceResult notspecifyService = new ServiceResult();
+            notspecifyService.ServiceId = "notspecify";
+            notspecifyService.ServiceName = "非指定設計";
+            serviceResultDic.Add(notspecifyService.ServiceId, notspecifyService);
+            ObservableCollection<Service> serviceCollection = MainWindowViewModel.ins().ServiceCollection;
+            foreach (Service service in serviceCollection)
+            {
+                ServiceResult sr = new ServiceResult();
+                sr.ServiceId = service.DBID.ToString();
+                sr.ServiceName = service.Name;
+                serviceResultDic.Add(sr.ServiceId, sr);
+            }
+
             foreach (DailyConsumption dailyConsumption in list)
             {
                 int bonus = 0;
-                int leftCost = dailyConsumption.Cost;
-                string[] goodsList = dailyConsumption.consumerGoodsId.Split(',');
-                foreach (string tempStr in goodsList)
+                string[] supportList = dailyConsumption.supporterId.Split(',');
+                List<string> tempList = new List<string>(supportList);
+                if (!tempList.Contains(employeeId) && !employeeId.Equals(dailyConsumption.employeeId))
                 {
-                    string goodsId = tempStr;
-                    string providerId = "";
-                    string[] strs = tempStr.Split('-');
-                    if (strs.Length >= 2)
-                    {
-                        goodsId = strs[0];
-                        providerId = strs[1];
-                    }
-                    Goods goods = MainWindowViewModel.ins().GetGoodsById(goodsId);
-                    if (goods == null)
-                        continue;
-                    if (providerId.Equals(employeeId) || (strs.Length < 2 && employeeId.Equals(dailyConsumption.employeeId)))
-                    {
-                        bonus += goods.Commission;
-                    }
-                    leftCost -= goods.Price;
+                    continue;
                 }
-                string[] serviceList = dailyConsumption.serviceId.Split(',');
-                foreach (string tempStr in serviceList)
+                if (dailyConsumption.month.Equals(date.Month))
                 {
-                    string serviceId = tempStr;
-                    string providerId = "";
-                    string[] strs = tempStr.Split('-');
-                    if (strs.Length >= 2)
+                    int leftCost = dailyConsumption.Cost;
+                    string[] goodsList = dailyConsumption.consumerGoodsId.Split(',');
+                    foreach (string tempStr in goodsList)
                     {
-                        serviceId = strs[0];
-                        providerId = strs[1];
+                        string goodsId = tempStr;
+                        string providerId = "";
+                        int goodsPrice = 0;
+                        int goodsBonus = 0;
+                        string[] strs = tempStr.Split('-');
+                        if (strs.Length >= 4)
+                        {
+                            goodsId = strs[0];
+                            providerId = strs[1];
+                            Int32.TryParse(strs[2], out goodsPrice);
+                            Int32.TryParse(strs[3], out goodsBonus);
+                        }
+                        if (providerId.Equals(employeeId))
+                        {
+                            bonus += goodsBonus;
+                        }
+                        leftCost -= goodsPrice;
                     }
-                    Service service = MainWindowViewModel.ins().GetServiceById(serviceId);
-                    if (service == null)
-                        continue;
-                    if (providerId.Equals(employeeId) || (strs.Length < 2 && employeeId.Equals(dailyConsumption.employeeId)))
-                    {
-                        bonus += service.Commission;
-                    }
-                    leftCost -= service.Commission;
-                }
 
-                if (employeeId.Equals(dailyConsumption.employeeId) && leftCost > 0)
-                {
-                    bonus += leftCost * data.Commission / 100;
+                    string[] serviceList = dailyConsumption.serviceId.Split(',');
+                    foreach (string tempStr in serviceList)
+                    {
+                        string serviceId = tempStr;
+                        string providerId = "";
+                        int servicePrice = 0;
+                        int servicBonus = 0;
+                        string[] strs = tempStr.Split('-');
+                        if (strs.Length >= 4)
+                        {
+                            serviceId = strs[0];
+                            providerId = strs[1];
+                            Int32.TryParse(strs[2], out servicePrice);
+                            Int32.TryParse(strs[3], out servicBonus);
+                        }
+                        if (providerId.Equals(employeeId))
+                        {
+                            bonus += servicBonus;
+                            if(serviceResultDic.ContainsKey(serviceId)){
+                                serviceResultDic[serviceId].MonthlyNumber += 1;
+                                serviceResultDic[serviceId].YearlyNumber += 1;
+                            }     
+                        }
+                        leftCost -= servicBonus;
+                    }
+                    if (employeeId.Equals(dailyConsumption.employeeId))
+                    {
+                        if (dailyConsumption.IsSpecify && serviceResultDic.ContainsKey("specify"))
+                        {
+                            serviceResultDic["specify"].MonthlyNumber += 1;
+                            serviceResultDic["specify"].YearlyNumber += 1;
+                        }
+                        else if (!dailyConsumption.IsSpecify && serviceResultDic.ContainsKey("notspecify"))
+                        {
+                            serviceResultDic["notspecify"].MonthlyNumber += 1;
+                            serviceResultDic["notspecify"].YearlyNumber += 1;
+                        }
+                        if(leftCost > 0)
+                            bonus += leftCost * data.Commission / 100;
+                    }
+                    totalBonus += bonus;
+                    dailyConsumption.EmployeeBonus = bonus;
+                    monthlyList.Add(dailyConsumption);
                 }
-                dailyConsumption.EmployeeBonus = bonus;
-                totalBonus += bonus;
+                else {
+                    string[] serviceList = dailyConsumption.serviceId.Split(',');
+                    foreach (string tempStr in serviceList)
+                    {
+                        string serviceId = tempStr;
+                        string providerId = "";
+                        string[] strs = tempStr.Split('-');
+                        if (strs.Length >= 4)
+                        {
+                            serviceId = strs[0];
+                            providerId = strs[1];
+                        }
+                        if (providerId.Equals(employeeId))
+                        {
+                            if (serviceResultDic.ContainsKey(serviceId))
+                            {
+                                serviceResultDic[serviceId].YearlyNumber += 1;
+                            }
+                        }
+                    }
+                    if (employeeId.Equals(dailyConsumption.employeeId))
+                    {
+                        if (dailyConsumption.IsSpecify && serviceResultDic.ContainsKey("specify"))
+                        {
+                            serviceResultDic["specify"].YearlyNumber += 1;
+                        }
+                        else if (!dailyConsumption.IsSpecify && serviceResultDic.ContainsKey("notspecify"))
+                        {
+                            serviceResultDic["notspecify"].YearlyNumber += 1;
+                        }
+                    }
+                }
             }
-            ICollectionView resultsView = CollectionViewSource.GetDefaultView(list);
-            this.ResultsGrid.ItemsSource = resultsView;
+            foreach (KeyValuePair<string, ServiceResult> pair in serviceResultDic) {
+                serviceResultList.Add(pair.Value);
+            }
+            ICollectionView monthlyView = CollectionViewSource.GetDefaultView(monthlyList);
+            ICollectionView resultsView = CollectionViewSource.GetDefaultView(serviceResultList);
+            this.ResultsGrid.ItemsSource = monthlyView;
+            this.ServicesGrid.ItemsSource = resultsView;
             this.EmployeeName.Text = data.Name;
             this.CaculateText.Text = data.BasicSalary + " + " + totalBonus + " = ";
             this.TotalSalaryText.Text = (data.BasicSalary + totalBonus).ToString();
@@ -97,6 +184,11 @@ namespace SalonManager.Views
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
             Printer.print(ResultsGrid);
+        }
+
+        private void PrintServicesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Printer.print(ServicesGrid);
         }
     }
 }

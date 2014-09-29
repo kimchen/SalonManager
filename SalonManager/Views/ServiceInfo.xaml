@@ -29,6 +29,12 @@
                     <TextBox Text="{Binding Commission}" Name="CommissionText"/>
                 </StackPanel>
             </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="備註" Name="Comment" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Comment}" Name="CommentText" Height="200" AcceptsReturn="True"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </Page>

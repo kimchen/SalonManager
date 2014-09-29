@@ -20,10 +20,14 @@ namespace SalonManager.Models
             month = date.Month;
             day = date.Day;
         }
+        private string dataString = "";
         public string DateString
         {
-            get { return year + "/" + month + "/" + day; }
-            set {}
+            get {
+                if (dataString.Equals("")) return year + "/" + month + "/" + day;
+                return dataString;
+            }
+            set { dataString = value; }
         }
 
         public string customerName = "";
@@ -40,10 +44,7 @@ namespace SalonManager.Models
         public string EmployeeName
         {
             get {
-                if (!IsSpecify)
-                    return employeeName;
-                else
-                    return employeeName + " (指定)";
+                return employeeName;
             }
             set { employeeName = value; }
         }
@@ -86,13 +87,6 @@ namespace SalonManager.Models
         {
             get { return service; }
             set { service = value; }
-        }
-
-        public int discount = 0;
-        public int Discount
-        {
-            get { return discount; }
-            set { discount = value; }
         }
 
         public int oriCost = 0;

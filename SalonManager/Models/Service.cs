@@ -44,6 +44,16 @@ namespace SalonManager.Models
         }
         #endregion
 
+        #region Comment
+        public string comment = "";
+        public string Comment
+        {
+            get { return comment; }
+            set { comment = value; }
+        }
+        #endregion
+        
+
         public override bool checkData()
         {
             if (Name.Equals(""))

@@ -25,14 +25,26 @@
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="成本" Name="Cost" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Cost}" Name="CostText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="抽成" Name="Commission" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Commission}" Name="CommissionText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="庫存" Name="Inventory" Style="{StaticResource InfoTxtStyle}"/>
                     <TextBox Text="{Binding Inventory}" Name="InventoryText" />
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="抽成金額" Name="Commission" Style="{StaticResource InfoTxtStyle}"/>
-                    <TextBox Text="{Binding Commission}" Name="CommissionText"/>
+                    <TextBlock Text="備註" Name="Comment" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Comment}" Name="CommentText" Height="200" AcceptsReturn="True"/>
                 </StackPanel>
             </Border>
         </StackPanel>

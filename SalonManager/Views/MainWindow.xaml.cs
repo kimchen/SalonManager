@@ -73,7 +73,13 @@ namespace SalonManager.Views
             }
             
         }
-        private void PrintButton_Click(object sender, RoutedEventArgs e)
+
+        private void PrintYearButton_Click(object sender, RoutedEventArgs e)
+        {
+            Printer.print(YearlyConsumptionsGrid);
+        }
+
+        private void PrintMonthButton_Click(object sender, RoutedEventArgs e)
         {
             Printer.print(MonthlyConsumptionsGrid);
         }

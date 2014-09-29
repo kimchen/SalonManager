@@ -31,6 +31,7 @@ namespace SalonManager.Views
             this.ComsumeGrid.ItemsSource = comsumeView;
 
             this.CustomerName.Text = data.Name;
+            this.ScalpTypeString.Text = data.createScalpTypeString();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

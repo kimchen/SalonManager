@@ -1,0 +1,34 @@
+﻿<Page x:Class="SalonManager.Views.OtherCostInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="300"
+	Title="OtherCostInfo">
+
+    <Grid>
+        <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="項目" Name="CostName" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding CostName}" Name="CostNameText"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="金額" Name="Cost" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Cost}" Name="CostText"/>
+                </StackPanel>
+            </Border> 
+            <Border Style="{StaticResource InfoBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="備註" Name="Comment" Style="{StaticResource InfoTxtStyle}"/>
+                    <TextBox Text="{Binding Comment}" Name="CommentText" Height="200" AcceptsReturn="True"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

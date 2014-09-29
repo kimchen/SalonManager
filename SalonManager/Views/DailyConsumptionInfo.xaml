@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="300"
+      d:DesignHeight="700" d:DesignWidth="300"
 	Title="DailyConsumptionInfo">
 
     <Grid>
@@ -41,6 +41,12 @@
                             <Button Name="ConsumerGoodsRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ConsumerGoodsRemoveBtn_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="價格" Margin="0,5"/>
+                            <TextBox Name="GoodsPrice" Width="80"/>
+                            <TextBlock Text="抽成" Margin="0,5"/>
+                            <TextBox Name="GoodsBonus" Width="80"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
                             <ComboBox Name="ConsumerGoodsAddBox" Width="120" Margin="5"/>
                             <ComboBox Name="GoodsProviderAddBox" Width="120" Margin="5"/>
                             <Button Name="ConsumerGoodsAddBtn" Content="加入" Foreground="Black" Background="LightBlue"  Height="30" Padding="10,0" Click="ConsumerGoodsAddBtn_Click"/>
@@ -58,6 +64,12 @@
                             <Button Name="ServiceRemoveBtn" Content="移除" Foreground="White" Background="Red"  Height="30" Padding="10,0" Click="ServiceRemoveBtn_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="價格" Margin="0,5"/>
+                            <TextBox Name="ServicePrice" Width="80"/>
+                            <TextBlock Text="抽成" Margin="0,5"/>
+                            <TextBox Name="ServiceBonus" Width="80"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
                             <ComboBox Name="ServiceAddBox" Width="120" Margin="5"/>
                             <ComboBox Name="ServiceProviderAddBox" Width="120" Margin="5"/>
                             <Button Name="ServiceAddBtn" Content="加入" Foreground="Black" Background="LightBlue"  Height="30" Padding="10,0" Click="ServiceAddBtn_Click"/>
@@ -68,12 +80,6 @@
             
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="折扣" Name="Discount" Style="{StaticResource InfoTxtStyle}"/>
-                    <TextBox Text="{Binding Discount}" Name="DiscountText" TextChanged="DiscountText_TextChanged"/>
-                </StackPanel>
-            </Border>
-            <Border Style="{StaticResource InfoBorderStyle}">
-                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="預付扣抵" Name="Payment" Style="{StaticResource InfoTxtStyle}"/>
                     <TextBox Text="{Binding Payment}" Name="PaymentText" TextChanged="PaymentText_TextChanged"/>
                 </StackPanel>
@@ -81,7 +87,7 @@
             <Border Style="{StaticResource InfoBorderStyle}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="總金額" Name="Cost" Style="{StaticResource InfoTxtStyle}"/>
-                    <TextBlock Text="{Binding Cost}" Name="CostText" Style="{StaticResource InfoTxtStyle}" Foreground="Red"/>
+                    <TextBlock Text="{Binding Cost}" Name="CostText" Foreground="Red"/>
                 </StackPanel>
             </Border>
         </StackPanel>

@@ -20,7 +20,7 @@ namespace SalonManager.Helpers
         private string password = "1234";
         private SQLiteConnection connection = null;
 
-        private Dictionary<string, Type> tableMap = new Dictionary<string, Type>() { { "customerTable", typeof(Customer) }, { "employeeTable", typeof(Employee) }, { "goodsTable", typeof(Goods) }, { "serviceTable", typeof(Service) }, { "consumptionTable", typeof(DailyConsumption) } };
+        private Dictionary<string, Type> tableMap = new Dictionary<string, Type>() { { "customerTable", typeof(Customer) }, { "employeeTable", typeof(Employee) }, { "goodsTable", typeof(Goods) }, { "serviceTable", typeof(Service) }, { "consumptionTable", typeof(DailyConsumption) }, { "otherCostTable", typeof(OtherCost) } };
 
         public static DBConnection ins()
         {
@@ -224,7 +224,7 @@ namespace SalonManager.Helpers
             }
             return list;
         }
-        public int addData<T>(object obj)
+        public long addData<T>(object obj)
         {
             if (connection == null)
                 return -1;
@@ -258,8 +258,10 @@ namespace SalonManager.Helpers
                 valueString = valueString.Remove(valueString.Length - 1);
             }
             string addString = "insert into " + tableName + "(" + keyString + ") values(" + valueString + ");";
-            return ExecuteNoQuery(addString);
+            ExecuteNoQuery(addString);
+            return connection.LastInsertRowId;
         }
+
         public int getDataId<T>(object obj)
         {
             if (connection == null)

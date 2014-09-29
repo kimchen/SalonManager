@@ -62,8 +62,8 @@ namespace SalonManager.Models
 
         public override bool checkData()
         {
-            if (BasicSalary == 0)
-                return false;
+            //if (BasicSalary == 0)
+            //    return false;
             return base.checkData();
         }
         public ICommand SalaryDetailCommand { get { return new DelegateCommand(OnSalaryDetailCommand); } }
@@ -73,24 +73,10 @@ namespace SalonManager.Models
             Dictionary<string,string> filter = new Dictionary<string,string>();
             DateTime date = MainWindowViewModel.ins().ChooseDate;
             filter.Add("year",date.Year.ToString());
-            filter.Add("month",date.Month.ToString());
+            //filter.Add("month",date.Month.ToString());
             //filter.Add("employeeId", this.DBID.ToString());
             List<DailyConsumption> resultsList = DBConnection.ins().queryData<DailyConsumption>(filter);
-            
-            List<DailyConsumption> removeList = new List<DailyConsumption>();
-            string employeeId = this.DBID.ToString();
-            foreach (DailyConsumption dailyConsumption in resultsList)
-            {
-                string[] supportList = dailyConsumption.supporterId.Split(',');
-                List<string> tempList = new List<string>(supportList);
-                if (!tempList.Contains(employeeId) && !employeeId.Equals(dailyConsumption.employeeId)){
-                    removeList.Add(dailyConsumption);
-                }
-            }
-            foreach (DailyConsumption dailyConsumption in removeList)
-            {
-                resultsList.Remove(dailyConsumption);
-            }
+
             window.setData(this, resultsList);
             window.ShowDialog();
         }

@@ -6,7 +6,8 @@
     <Grid Name="DataGrid">
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
             <TextBlock Name="CustomerName"  Text="XXX" Padding="5,5" Foreground="Blue"/>
-            <TextBlock Text="消費紀錄清單" Padding="5,5"/>
+            <TextBlock Name="ScalpTypeString"  Text="XXX" Padding="5,5"/>
+            <TextBlock Text="消費紀錄清單" Padding="5,5" Foreground="Red"/>
             <DataGrid Name="ComsumeGrid" Width="780" Height="400" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding DateString}"
@@ -24,9 +25,6 @@
                     <DataGridTextColumn Binding="{Binding Service}"
                                         IsReadOnly="True"
                                         Header="服務內容" Width="1*"/>
-                    <DataGridTextColumn Binding="{Binding Discount}"
-                                        IsReadOnly="True"
-                                        Header="折扣" Foreground="Green" Width="1*"/>
                     <DataGridTextColumn Binding="{Binding Payment}"
                                         IsReadOnly="True"
                                         Header="預付金扣抵" Foreground="Red" Width="1*"/>

@@ -41,6 +41,15 @@ namespace SalonManager.Models
         }
         #endregion
 
+        #region Cost
+        public int cost = 0;
+        public int Cost
+        {
+            get { return cost; }
+            set { cost = value; }
+        }
+        #endregion
+
         #region Inventory
         public int inventory = 0;
         public int Inventory
@@ -59,11 +68,18 @@ namespace SalonManager.Models
         }
         #endregion
 
+        #region Comment
+        public string comment = "";
+        public string Comment
+        {
+            get { return comment; }
+            set { comment = value; }
+        }
+        #endregion
+        
         public override bool checkData()
         {
             if (Name.Equals(""))
-                return false;
-            if (Commission > Price)
                 return false;
             if (Inventory < 0)
                 return false;
